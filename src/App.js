@@ -1,5 +1,5 @@
 import React from 'react';
-import "./App.css"
+import "./App.scss"
 import Sidebar from './components/Sidebar';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { About, Dashboard, ManageExercise, ManageFood, ManageUser } from './pages';
