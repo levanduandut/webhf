@@ -6,6 +6,7 @@ import { About, Dashboard, ManageExercise, ManageFood, ManageUser } from './page
 
 const App = () => {
   return (
+    
     <div>
       <BrowserRouter>
         <Sidebar>

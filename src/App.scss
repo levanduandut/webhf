@@ -3,7 +3,7 @@
   padding: 0;
   text-decoration: none;
 }
-.container {
+.containerX {
   display: flex;
 }
 main {
@@ -35,6 +35,8 @@ main {
     color: aliceblue;
     padding: 10px 15px;
     gap: 15px;
+    align-items: center;
+    align-self: center;
     transition: all 0.5s;
 }
 .link:hover{
