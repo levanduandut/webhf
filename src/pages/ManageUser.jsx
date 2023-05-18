@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "../styles/ManageUser.scss";
 import { getAllUsers, createNewUserService } from '../services/userService';
 import ModalUser from './ModalUser';
+import { emitter } from '../utils/emitter';
 class ManageUser extends Component {
     constructor(props) {
         super(props);
@@ -46,7 +47,7 @@ class ManageUser extends Component {
                 this.setState({
                     isOpenModal: false,
                 });
-                // emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
+                emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
             }
         } catch (error) {
             console.log(error);

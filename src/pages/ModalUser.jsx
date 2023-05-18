@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
+import { emitter } from "../utils/emitter";
 // import { connect } from "react-redux";
 class ModalUser extends Component {
     constructor(props) {
@@ -12,6 +13,19 @@ class ModalUser extends Component {
             gender: "",
             roleId: "",
         };
+        this.listenEmitter();
+    }
+    listenEmitter() {
+        emitter.on("EVENT_CLEAR_MODAL", () => {
+            this.setState({
+                email: "",
+                password: "",
+                fullName: "",
+                address: "",
+                gender: "",
+                roleId: "",
+            });
+        });
     }
     handleOnchange = (event, item) => {
         let copyState = { ...this.state };
