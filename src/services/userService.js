@@ -6,5 +6,8 @@ const getAllUsers = (inputId) => {
 const createNewUserService = (data) => {
     return axios.post(`http://localhost:8069/api/admin/create-new-user`, data);
 };
+const deleteUserService = (id) => {
+    return axios.post(`http://localhost:8069/api/admin/delete-user`, { id: id });
+  };
 
-export { getAllUsers , createNewUserService}
+export { getAllUsers , createNewUserService,deleteUserService}

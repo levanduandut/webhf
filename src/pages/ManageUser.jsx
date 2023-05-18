@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "../styles/ManageUser.scss";
-import { getAllUsers, createNewUserService } from '../services/userService';
+import { getAllUsers, createNewUserService, deleteUserService } from '../services/userService';
 import ModalUser from './ModalUser';
 import { emitter } from '../utils/emitter';
 class ManageUser extends Component {
@@ -40,7 +40,6 @@ class ManageUser extends Component {
             let response = await createNewUserService(data);
 
             if (response && response.data && response.data.errCode !== 0) {
-                console.log(response);
                 alert(response.data.message);
             } else {
                 await this.getAllUsersFrom();
@@ -48,6 +47,18 @@ class ManageUser extends Component {
                     isOpenModal: false,
                 });
                 emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    handleDeleteUser = async (item) => {
+        try {
+            let response = await deleteUserService(item.id);
+            if (response && response.data && response.data.errCode !== 0) {
+                alert(response.data.message);
+            } else {
+                await this.getAllUsersFrom();
             }
         } catch (error) {
             console.log(error);
@@ -94,9 +105,9 @@ class ManageUser extends Component {
                                             <td>{new Date(item.createdAt).getDate()}/{new Date(item.createdAt).getMonth() + 1}/{new Date(item.createdAt).getFullYear()}</td>
                                             <td>{new Date(item.updatedAt).getDate()}/{new Date(item.updatedAt).getMonth() + 1}/{new Date(item.updatedAt).getFullYear()}</td>
                                             <td>
-                                                <button class="button button2">Edit</button>
-                                                <button class="button button3">Delete</button>
-                                                <button class="button button4">Info</button>
+                                                <button className="button button2">Edit</button>
+                                                <button onClick={() => this.handleDeleteUser(item)} className="button button3">Delete</button>
+                                                <button className="button button4">Info</button>
                                             </td>
                                         </tr>
                                     )
