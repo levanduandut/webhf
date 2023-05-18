@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import "../styles/ManageUser.scss";
-import { getAllUsers } from '../services/userService';
+import { getAllUsers, createNewUserService } from '../services/userService';
 import ModalUser from './ModalUser';
 class ManageUser extends Component {
     constructor(props) {
@@ -13,13 +13,17 @@ class ManageUser extends Component {
         }
     }
     async componentDidMount() {
+        await this.getAllUsersFrom();
+    }
+
+    getAllUsersFrom = async () => {
         let res = await getAllUsers("");
         if (res && res.data.errCode === 0) {
             this.setState({
                 arrUsers: res.data.users
             })
         }
-    }
+    };
     handleAddNewUser = () => {
         this.setState({
             isOpenModal: true,
@@ -30,12 +34,27 @@ class ManageUser extends Component {
             isOpenModal: !this.state.isOpenModal,
         });
     };
+    createNewUsers = async (data) => {
+        try {
+            let response = await createNewUserService(data);
+
+            if (response && response.data && response.data.errCode !== 0) {
+                console.log(response);
+                alert(response.data.message);
+            } else {
+                await this.getAllUsersFrom();
+                this.setState({
+                    isOpenModal: false,
+                });
+                // emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     render() {
-        console.log(this.state.arrUsers)
         let arrUsers = this.state.arrUsers;
-
-
         return (
             <div>
                 <ModalUser
@@ -44,7 +63,7 @@ class ManageUser extends Component {
                     createNewUser={this.createNewUsers}
                 />
                 <div className='mx-1'>
-                    <button class="buttonA buttonA2" onClick={() => this.handleAddNewUser()}>Thêm mới người dùng</button>
+                    <button className="buttonA buttonA2" onClick={() => this.handleAddNewUser()}>Thêm mới người dùng</button>
                 </div>
                 <div className='user-manager'>
                     <table id="customers">
@@ -55,6 +74,7 @@ class ManageUser extends Component {
                                 <th>Phân Quyền</th>
                                 <th>Giới tính</th>
                                 <th>Tình trạng bệnh</th>
+                                <th>Địa chỉ</th>
                                 <th>Ngày tạo</th>
                                 <th>Ngày cập nhật</th>
                                 <th>Hành động</th>
@@ -67,8 +87,9 @@ class ManageUser extends Component {
                                             <td>{item.email}</td>
                                             <td>{item.fullName}</td>
                                             <td>{item.roleId === "2" ? "Admin" : "Người dùng"} </td>
-                                            <td>{item.gender === false ? "Không xác định" : "Nam"}</td>
+                                            <td>{item.gender === false ? "" : "Nam"}</td>
                                             <td>{item.sick === null ? "Khỏe mạnh" : item.sick}</td>
+                                            <td>{item.address === null ? "" : item.address}</td>
                                             <td>{new Date(item.createdAt).getDate()}/{new Date(item.createdAt).getMonth() + 1}/{new Date(item.createdAt).getFullYear()}</td>
                                             <td>{new Date(item.updatedAt).getDate()}/{new Date(item.updatedAt).getMonth() + 1}/{new Date(item.updatedAt).getFullYear()}</td>
                                             <td>

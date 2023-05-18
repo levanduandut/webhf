@@ -4,8 +4,48 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 class ModalUser extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            email: "",
+            password: "",
+            fullName: "",
+            address: "",
+            gender: "",
+            roleId: "",
+        };
     }
+    handleOnchange = (event, item) => {
+        let copyState = { ...this.state };
+        copyState[item] = event.target.value;
+        this.setState({
+            ...copyState,
+        });
+    };
+    handleAddNewUser = () => {
+        if (this.checkValidateInput()) {
+            //Call api
+            this.props.createNewUser(this.state);
+            //   console.log("data modal ", this.state);
+        }
+    }
+    checkValidateInput = () => {
+        let isValid = true;
+        let arrInput = [
+            "email",
+            "password",
+            "fullName",
+            "address",
+            "gender",
+            "roleId",
+        ];
+        for (let i = 0; i < arrInput.length; i++) {
+            if (!this.state[arrInput[i]]) {
+                isValid = false;
+                alert("Bạn nhập thiếu :" + arrInput[i]);
+                break;
+            }
+        }
+        return isValid;
+    };
 
     componentDidMount() { }
     toggle = () => {
@@ -24,10 +64,7 @@ class ModalUser extends Component {
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
-                    <h5 style={{color:'#11580a'}}>
                     Thêm mới người dùng
-                    </h5>
-                    
                 </ModalHeader>
                 <ModalBody>
                     <div className="container">
@@ -77,7 +114,7 @@ class ModalUser extends Component {
                                 </div>
                             </div>
                             <div className="form-group col-md-24">
-                                <label>Dịa chỉ</label>
+                                <label>Địa chỉ</label>
                                 <input
                                     type="text"
                                     onChange={(event) => {
@@ -89,7 +126,7 @@ class ModalUser extends Component {
                                     value={this.state.address}
                                 />
                             </div>
-                            <div className="form-row">
+                            <div className="form-row" style={{ display: 'flex', gap: '20px' }}>
                                 <div className="form-group col-md-3">
                                     <label>Gender</label>
                                     <select
@@ -129,7 +166,7 @@ class ModalUser extends Component {
                     <Button
                         color="primary "
                         className="px-3"
-                        onClick={() => this.hanndleAddNewUser()}
+                        onClick={() => this.handleAddNewUser()}
                     >
                         Tạo mới
                     </Button>{" "}
