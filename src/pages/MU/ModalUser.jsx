@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
-import { emitter } from "../utils/emitter";
+import { emitter } from "../../utils/emitter";
 // import { connect } from "react-redux";
 class ModalUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
             email: "",
+            age:"",
             password: "",
             fullName: "",
             address: "",
@@ -18,6 +19,7 @@ class ModalUser extends Component {
     listenEmitter() {
         emitter.on("EVENT_CLEAR_MODAL", () => {
             this.setState({
+                age:"",
                 email: "",
                 password: "",
                 fullName: "",
@@ -50,6 +52,7 @@ class ModalUser extends Component {
             "address",
             "gender",
             "roleId",
+            "age",
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -171,6 +174,19 @@ class ModalUser extends Component {
                                         <option value="1">Admin</option>
                                         <option value="2">User</option>
                                     </select>
+                                </div>
+                                <div className="form-group col-md-3">
+                                    <label>Tuổi</label>
+                                    <input
+                                        type="text"
+                                        onChange={(event) => {
+                                            this.handleOnchange(event, "age");
+                                        }}
+                                        className="form-control"
+                                        name="age"
+                                        placeholder="Vd: 18"
+                                        value={this.state.age}
+                                    />
                                 </div>
                             </div>
                         </div>

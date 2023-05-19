@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import "../styles/ManageUser.scss";
-import { getAllUsers, createNewUserService, deleteUserService } from '../services/userService';
+import "../../styles/ManageUser.scss";
+import { getAllUsers, createNewUserService, deleteUserService, editUserService } from '../../services/userService';
 import ModalUser from './ModalUser';
-import { emitter } from '../utils/emitter';
+import ModalEditUser from './ModalEditUser';
+import { emitter } from '../../utils/emitter';
 class ManageUser extends Component {
     constructor(props) {
         super(props);
@@ -11,6 +12,7 @@ class ManageUser extends Component {
             isOpenModal: false,
             isOpenEditUser: false,
             userEdit: {},
+            search: ""
         }
     }
     async componentDidMount() {
@@ -33,6 +35,11 @@ class ManageUser extends Component {
     toggleUserMoDal = () => {
         this.setState({
             isOpenModal: !this.state.isOpenModal,
+        });
+    };
+    toggleUserEditMoDal = () => {
+        this.setState({
+            isOpenEditUser: !this.state.isOpenEditUser,
         });
     };
     createNewUsers = async (data) => {
@@ -64,16 +71,51 @@ class ManageUser extends Component {
             console.log(error);
         }
     };
+    handleEditUser = async (item) => {
+        this.setState({
+            isOpenEditUser: true,
+            userEdit: item,
+        });
+    };
+    saveEditUser = async (data) => {
+        try {
+            let response = await editUserService(data);
+            console.log(response.data)
+            if (response && response.data.errCode !== 0) {
+                alert(response.message);
+            } else {
+                await this.getAllUsersFrom();
+                this.setState({
+                    isOpenEditUser: false,
+                });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     render() {
         let arrUsers = this.state.arrUsers;
+        console.log(this.state.search)
         return (
             <div>
+                <div>
+                    <input onChange={(e) => this.setState({ search: e.target.value })}></input>
+                </div>
                 <ModalUser
                     isOpen={this.state.isOpenModal}
                     toggleUFromParent={this.toggleUserMoDal}
                     createNewUser={this.createNewUsers}
                 />
+                {this.state.isOpenEditUser && (
+                    <ModalEditUser
+                        isOpen={this.state.isOpenEditUser}
+                        toggleUFromParent={this.toggleUserEditMoDal}
+                        currentUser={this.state.userEdit}
+                        saveUser={this.saveEditUser}
+                    // createNewUser={this.createNewUsers}
+                    />
+                )}
                 <div className='mx-1'>
                     <button className="buttonA buttonA2" onClick={() => this.handleAddNewUser()}>Thêm mới người dùng</button>
                 </div>
@@ -85,6 +127,7 @@ class ManageUser extends Component {
                                 <th>Tên</th>
                                 <th>Phân Quyền</th>
                                 <th>Giới tính</th>
+                                <th>Tuổi</th>
                                 <th>Tình trạng bệnh</th>
                                 <th>Địa chỉ</th>
                                 <th>Ngày tạo</th>
@@ -93,19 +136,22 @@ class ManageUser extends Component {
                             </tr>
 
                             {
-                                arrUsers && arrUsers.map((item, index) => {
+                                arrUsers && arrUsers.filter((item) => {
+                                    return this.state.search.toLowerCase() === '' ? item : item.email.toLowerCase().includes(this.state.search)
+                                }).map((item, index) => {
                                     return (
                                         <tr key={index}>
                                             <td>{item.email}</td>
                                             <td>{item.fullName}</td>
                                             <td>{item.roleId === "2" ? "Admin" : "Người dùng"} </td>
-                                            <td>{item.gender === false ? "" : "Nam"}</td>
+                                            <td>{item.gender === 1 ? "Nữ" : (item.gender === 0 ? "Nam" : "Khác")}</td>
+                                            <td>{item.age === null ? "" : item.age}</td>
                                             <td>{item.sick === null ? "Khỏe mạnh" : item.sick}</td>
                                             <td>{item.address === null ? "" : item.address}</td>
                                             <td>{new Date(item.createdAt).getDate()}/{new Date(item.createdAt).getMonth() + 1}/{new Date(item.createdAt).getFullYear()}</td>
                                             <td>{new Date(item.updatedAt).getDate()}/{new Date(item.updatedAt).getMonth() + 1}/{new Date(item.updatedAt).getFullYear()}</td>
                                             <td>
-                                                <button className="button button2">Edit</button>
+                                                <button onClick={() => this.handleEditUser(item)} className="button button2">Edit</button>
                                                 <button onClick={() => this.handleDeleteUser(item)} className="button button3">Delete</button>
                                                 <button className="button button4">Info</button>
                                             </td>
