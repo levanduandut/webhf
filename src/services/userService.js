@@ -1,5 +1,7 @@
 import axios from "axios";
-
+const handleLoginApi = (useremail, userpassword) => {
+    return axios.post("http://localhost:8069/api/admin/login", { email: useremail, password: userpassword });
+};
 const getAllUsers = (inputId) => {
     return axios.get(`http://localhost:8069/api/admin/get-all-user?id=${inputId}`);
 };
@@ -13,4 +15,4 @@ const editUserService = (data) => {
     return axios.put("http://localhost:8069/api/admin/edit-user", data);
 };
 
-export { getAllUsers, createNewUserService, deleteUserService ,editUserService}
+export { getAllUsers, createNewUserService, deleteUserService, editUserService, handleLoginApi }

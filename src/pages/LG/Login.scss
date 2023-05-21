@@ -1,0 +1,96 @@
+.main-login {
+  padding-top: 70px;
+  min-width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: linear-gradient(to right, rgb(223, 221, 221) 50%, #5be7ad 50%);
+  .login-contain {
+    height: 75vh;
+    width: 80vw;
+    background: linear-gradient(
+      to right,
+      rgba(236, 236, 236, 0.7) 50%,
+      rgba(236, 236, 236, 0.3) 50%
+    );
+    border-radius: 1rem;
+    margin: 2rem auto;
+    box-shadow: 0.5rem 0.5rem 2rem -1rem rgb(57, 57, 57);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .left-side,
+    .right-side {
+      margin: 2rem 2rem;
+      box-shadow: 0.5rem 0.5rem 2rem -1rem rgb(57, 57, 57);
+      height: 80%;
+      width: 100%;
+
+      .login-content {
+        padding: 100px;
+        margin: 0 auto;
+
+        .text-login {
+          text-align: center;
+          font-weight: 600;
+          font-size: 24px;
+          padding-top: 10px;
+          padding-bottom: 20px;
+        }
+        label{
+            color: #18724d;
+        }
+
+        .login-input {
+          margin-top: 7px;
+
+          .custom-input-password {
+            position: relative;
+
+            i {
+              position: absolute;
+              right: 5px;
+              top: 10px;
+              cursor: pointer;
+            }
+          }
+        }
+
+        .btn-login {
+          width: 100%;
+          height: 40px;
+          margin: 10px 0;
+          border-radius: 15px;
+          outline: none;
+          border: none;
+          background: #63d8a7;
+          color: white;
+        }
+
+        .fg-pass {
+          font-size: 12px;
+        }
+      }
+    }
+    .right-side {
+        .welcomeNote{
+            h3{
+                margin-left: 1rem;
+                color: black;
+                float: left;
+                margin-bottom: 2.5rem;
+            }
+        }
+        .welcomeImg{
+            height: 50%;
+            width: 70%;
+            margin: 0rem auto;
+            #wel-img{
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+
+    }
+  }
+}
