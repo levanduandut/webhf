@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { emitter } from "../../utils/emitter";
+import "./Modal.scss"
 // import { connect } from "react-redux";
 class ModalUser extends Component {
     constructor(props) {
@@ -145,7 +146,7 @@ class ModalUser extends Component {
                             </div>
                             <div className="form-row" style={{ display: 'flex', gap: '20px' }}>
                                 <div className="form-group col-md-3">
-                                    <label>Gender</label>
+                                    <label>Giới tính</label>
                                     <select
                                         name="gender"
                                         onChange={(event) => {

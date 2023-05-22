@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import _ from "lodash";
+import "./Modal.scss"
 class ModalEditUser extends Component {
     constructor(props) {
         super(props);
@@ -137,7 +138,7 @@ class ModalEditUser extends Component {
                             </div>
                             <div className="form-row" style={{ display: 'flex', gap: '20px' }}>
                                 <div className="form-group col-md-3">
-                                    <label>Gender</label>
+                                    <label>Giới tính</label>
                                     <select
                                         name="gender"
                                         onChange={(event) => {

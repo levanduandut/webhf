@@ -29,16 +29,20 @@
       .login-content {
         padding: 100px;
         margin: 0 auto;
-
+        .errMessage {
+          font-family: "Pacifico", cursive;
+        }
         .text-login {
+          font-family: "Anton", sans-serif;
           text-align: center;
           font-weight: 600;
           font-size: 24px;
           padding-top: 10px;
           padding-bottom: 20px;
         }
-        label{
-            color: #18724d;
+        label {
+          color: #18724d;
+          font-family: "Pacifico", cursive;
         }
 
         .login-input {
@@ -48,6 +52,7 @@
             position: relative;
 
             i {
+              color: #b6c0bc;
               position: absolute;
               right: 5px;
               top: 10px;
@@ -57,6 +62,7 @@
         }
 
         .btn-login {
+          font-family: "Pacifico", cursive;
           width: 100%;
           height: 40px;
           margin: 10px 0;
@@ -73,24 +79,24 @@
       }
     }
     .right-side {
-        .welcomeNote{
-            h3{
-                margin-left: 1rem;
-                color: black;
-                float: left;
-                margin-bottom: 2.5rem;
-            }
+      .welcomeNote {
+        h3 {
+          font-family: "Pacifico", cursive;
+          margin-left: 1rem;
+          color: black;
+          float: left;
+          margin-bottom: 2.5rem;
         }
-        .welcomeImg{
-            height: 50%;
-            width: 70%;
-            margin: 0rem auto;
-            #wel-img{
-                width: 100%;
-                object-fit: cover;
-            }
+      }
+      .welcomeImg {
+        height: 50%;
+        width: 70%;
+        margin: 0rem auto;
+        #wel-img {
+          width: 100%;
+          object-fit: cover;
         }
-
+      }
     }
   }
 }

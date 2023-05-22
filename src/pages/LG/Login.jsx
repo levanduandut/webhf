@@ -1,14 +1,13 @@
 import React from 'react'
 import "./Login.scss"
-import { render } from '@testing-library/react'
 import { Component } from 'react'
 import { handleLoginApi } from '../../services/userService';
-import ImgWel from "../../Image/hinhnen.png"
+import ImgWel from "../../Others/hinhnen.png"
 class Login extends Component {
     constructor(props) {
         super(props); // Ham tao
         this.state = {
-            username: "",
+            email: "",
             password: "",
             isShowPassword: false,
             errMessage: "",
@@ -16,38 +15,49 @@ class Login extends Component {
     }
     handleOnchangeUserName = (event) => {
         this.setState({
-            username: event.target.value,
+            email: event.target.value,
+            errMessage: "",
         });
     };
     handleOnchangePassword = (event) => {
         this.setState({
             password: event.target.value,
+            errMessage: "",
         });
     };
     handleLogin = async (event) => {
+
         this.setState({
             errMessage: "",
         });
-        try {
-            let data = await handleLoginApi(this.state.username, this.state.password);
-            if (data && data.errCode !== 0) {
-
-                this.setState({
-                    errMessage: data.message,
-                });
-            }
-            if (data && data.errCode === 0) {
-                this.props.userLoginSuccess(data.user)
-            }
-        } catch (error) {
-            if (error.response) {
-                if (error.response.data) {
+        if (this.state.password==="" && this.state.email==="") {
+            this.setState({
+                errMessage: "Bạn chưa nhập email hoặc mật khẩu",
+            });
+        } else {
+            try {
+                let data = await handleLoginApi(this.state.email, this.state.password);
+                if (data && data.data && data.data.errCode !== 0) {
                     this.setState({
-                        errMessage: error.response.data.message,
+                        errMessage: data.data.message,
                     });
+                }
+                if (data && data.data && data.data.errCode === 0) {
+                    // this.props.userLoginSuccess(data.user)
+                    console.log("Login Ok")
+                    localStorage.setItem("Login","OK")
+                }
+            } catch (error) {
+                if (error.response) {
+                    if (error.response.data) {
+                        this.setState({
+                            errMessage: error.response.data.message,
+                        });
+                    }
                 }
             }
         }
+
     };
     handleShowHidePassword = () => {
         this.setState({
@@ -65,10 +75,10 @@ class Login extends Component {
                                 <div className="col-12 form-group ">
                                     <label>Email</label>
                                     <input
-                                        type="text"
+                                        type="email"
                                         className="col-12 form-control login-input"
                                         placeholder="Nhập email"
-                                        value={this.state.username}
+                                        value={this.state.email}
                                         onChange={(event) => this.handleOnchangeUserName(event)}
                                     ></input>
                                 </div>
@@ -98,7 +108,7 @@ class Login extends Component {
                                         </span>
                                     </div>
                                 </div>
-                                <div className="col-12" style={{ color: "red" }}>
+                                <div className="col-12 errMessage" style={{ color: "red" }}>
                                     {this.state.errMessage}
                                 </div>
 
@@ -117,10 +127,10 @@ class Login extends Component {
                     </div>
                     <div className='right-side'>
                         <div className='welcomeNote'>
-                            <h3>Chào mừng người quản trị</h3>
+                            <h3>Chào mừng người quản trị App HealthFood</h3>
                         </div>
                         <div className='welcomeImg'>
-                            <img src={ImgWel} id='wel-img' />
+                            <img src={ImgWel} id='wel-img' alt='Anh nen' />
                         </div>
                     </div>
                 </div>
