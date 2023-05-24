@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../../styles/ManageUser.scss";
+import "./ManageUser.scss";
 import {
     getAllUsers,
     createNewUserService,
@@ -129,83 +129,85 @@ class ManageUser extends Component {
                 <div style={{ display: "flex", margin: "20px", width: "500px", gap: "20px" }}>
                     <div>
                         <input
-                            placeholder="Tìm kiêm "
+                            placeholder="Tìm kiêm theo Email"
                             className="form-control"
                             onChange={(e) => this.setState({ search: e.target.value })}
                         ></input>
                     </div>
                 </div>
+                <div className='table-container'>
+                    <div className="user-manager">
+                        <table id="customers">
+                            <tbody>
+                                <tr>
+                                    <th>Email</th>
+                                    <th>Tên</th>
+                                    <th>Phân Quyền</th>
+                                    <th>Giới tính</th>
+                                    <th>Tuổi</th>
+                                    <th>Tình trạng bệnh</th>
+                                    <th>Địa chỉ</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Ngày cập nhật</th>
+                                    <th>Hành động</th>
+                                </tr>
 
-                <div className="user-manager">
-                    <table id="customers">
-                        <tbody>
-                            <tr>
-                                <th>Email</th>
-                                <th>Tên</th>
-                                <th>Phân Quyền</th>
-                                <th>Giới tính</th>
-                                <th>Tuổi</th>
-                                <th>Tình trạng bệnh</th>
-                                <th>Địa chỉ</th>
-                                <th>Ngày tạo</th>
-                                <th>Ngày cập nhật</th>
-                                <th>Hành động</th>
-                            </tr>
-
-                            {arrUsers &&
-                                arrUsers
-                                    .filter((item) => {
-                                        return this.state.search.toLowerCase() === ""
-                                            ? item
-                                            : item.email.toLowerCase().includes(this.state.search);
-                                    })
-                                    .map((item, index) => {
-                                        return (
-                                            <tr key={index}>
-                                                <td>{item.email}</td>
-                                                <td>{item.fullName}</td>
-                                                <td>{item.roleId === "2" ? "Admin" : "Người dùng"} </td>
-                                                <td>
-                                                    {item.gender === 1
-                                                        ? "Nữ"
-                                                        : item.gender === 0
-                                                            ? "Nam"
-                                                            : "Khác"}
-                                                </td>
-                                                <td>{item.age === null ? "" : item.age}</td>
-                                                <td>{item.sick === null ? "Khỏe mạnh" : item.sick}</td>
-                                                <td>{item.address === null ? "" : item.address}</td>
-                                                <td>
-                                                    {new Date(item.createdAt).getDate()}/
-                                                    {new Date(item.createdAt).getMonth() + 1}/
-                                                    {new Date(item.createdAt).getFullYear()}
-                                                </td>
-                                                <td>
-                                                    {new Date(item.updatedAt).getDate()}/
-                                                    {new Date(item.updatedAt).getMonth() + 1}/
-                                                    {new Date(item.updatedAt).getFullYear()}
-                                                </td>
-                                                <td>
-                                                    <button
-                                                        onClick={() => this.handleEditUser(item)}
-                                                        className="button button2"
-                                                    >
-                                                        Edit
-                                                    </button>
-                                                    <button
-                                                        onClick={() => this.handleDeleteUser(item)}
-                                                        className="button button3"
-                                                    >
-                                                        Delete
-                                                    </button>
-                                                    <button className="button button4">Info</button>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                        </tbody>
-                    </table>
+                                {arrUsers &&
+                                    arrUsers
+                                        .filter((item) => {
+                                            return this.state.search.toLowerCase() === ""
+                                                ? item
+                                                : item.email.toLowerCase().includes(this.state.search);
+                                        })
+                                        .map((item, index) => {
+                                            return (
+                                                <tr key={index}>
+                                                    <td>{item.email}</td>
+                                                    <td>{item.fullName}</td>
+                                                    <td>{item.roleId === "2" ? "Admin" : "Người dùng"} </td>
+                                                    <td>
+                                                        {item.gender === 1
+                                                            ? "Nữ"
+                                                            : item.gender === 0
+                                                                ? "Nam"
+                                                                : "Khác"}
+                                                    </td>
+                                                    <td>{item.age === null ? "" : item.age}</td>
+                                                    <td>{item.sick === null ? "Khỏe mạnh" : item.sick}</td>
+                                                    <td>{item.address === null ? "" : item.address}</td>
+                                                    <td>
+                                                        {new Date(item.createdAt).getDate()}/
+                                                        {new Date(item.createdAt).getMonth() + 1}/
+                                                        {new Date(item.createdAt).getFullYear()}
+                                                    </td>
+                                                    <td>
+                                                        {new Date(item.updatedAt).getDate()}/
+                                                        {new Date(item.updatedAt).getMonth() + 1}/
+                                                        {new Date(item.updatedAt).getFullYear()}
+                                                    </td>
+                                                    <td>
+                                                        <button
+                                                            onClick={() => this.handleEditUser(item)}
+                                                            className="button button2"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                        <button
+                                                            onClick={() => this.handleDeleteUser(item)}
+                                                            className="button button3"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                        <button className="button button4">Info</button>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
+
             </div>
         );
     }
