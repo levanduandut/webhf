@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import "./ManageIngredient.scss";
 import * as XLSX from "xlsx";
 import ModalIngredient from './ModalIngredient';
+import { deleteIngreService, newIngreService } from '../../services/userService';
+import { emitter } from "../../utils/emitter";
 
 const ManageIngredient = () => {
     const navigate = useNavigate();
@@ -24,26 +26,55 @@ const ManageIngredient = () => {
         setIsOpenModal(!isOpenModal);
     }
     async function createNewIngre(data) {
-        // try {
-        //     let response = await editUserService(data);
-        //     console.log(response.data);
-        //     if (response && response.data.errCode !== 0) {
-        //         alert(response.message);
-        //     } else {
-        //         await this.getAllUsersFrom();
-        //         this.setState({
-        //             isOpenEditUser: false,
-        //         });
-        //     }
-        // } catch (error) {
-        //     console.log(error);
-        // }
+        try {
+            let response = await newIngreService(data);
+            console.log(response.data);
+            if (response && response.data.errCode !== 0) {
+                alert(response.message);
+            } else {
+                // await this.getAllUsersFrom();
+                setIsOpenModal(false)
+                emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
+    async function handleDeleteAllIngre() {
+        try {
+            let response = await deleteIngreService();
+            console.log(response.data);
+            if (response && response.data.errCode !== 0) {
+                alert(response.message);
+            } else {
 
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async function handleAddExcelIngre(items) {
+        try {
+            if (items) {
+                let response = await newIngreService(items);
+                console.log(response.data);
+                if (response && response.data.errCode !== 0) {
+                    alert(response.message);
+                } else {
+                }
+            } else {
+                alert("Chưa import file !")
+
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     function readExcel(e) {
         const file = e.target.files[0];
-        const promise = new Promise((resolve, reject) => {
+        const promise = new Promise(async (resolve, reject) => {
             const fileReader = new FileReader();
             fileReader.readAsArrayBuffer(file);
             fileReader.onload = (e) => {
@@ -72,7 +103,7 @@ const ManageIngredient = () => {
             <ModalIngredient
                 isOpen={isOpenModal}
                 toggleUFromParent={toggleUserMoDal}
-                createNewUser={createNewIngre}
+                createNewIngre={createNewIngre}
             />
             <h1>Quản lý thành phần</h1>
             <div className='inputFile'>
@@ -86,13 +117,13 @@ const ManageIngredient = () => {
                 <h5>Nhập file Excel input dữ liệu :</h5>
                 <input type='file' onChange={(e) => readExcel(e)}></input>
                 <button
-                    onClick={() => handleEditUser()}
+                    onClick={() => handleAddExcelIngre()}
                     className="button button5"
                 >
                     Ghi dữ liệu vào database
                 </button>
                 <button
-                    onClick={() => handleEditUser()}
+                    onClick={() => handleDeleteAllIngre()}
                     className="button button6"
                 >
                     Xóa toàn bộ dữ liệu

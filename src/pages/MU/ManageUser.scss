@@ -110,3 +110,14 @@ table td {
   font-size: 13px;
   border: 1px solid rgb(41, 40, 40);
 }
+.searchInput {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-bottom: 20px;
+  gap: 30px;
+  .form-control {
+    max-width: 400px;
+    border: 1px rgb(3, 131, 41) solid;
+  }
+}

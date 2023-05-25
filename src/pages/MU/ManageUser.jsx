@@ -126,14 +126,13 @@ class ManageUser extends Component {
                         Thêm mới người dùng
                     </button>
                 </div>
-                <div style={{ display: "flex", margin: "20px", width: "500px", gap: "20px" }}>
-                    <div>
-                        <input
-                            placeholder="Tìm kiêm theo Email"
-                            className="form-control"
-                            onChange={(e) => this.setState({ search: e.target.value })}
-                        ></input>
-                    </div>
+                <div className="searchInput">
+                    <input
+                        placeholder="Tìm kiêm theo Email"
+                        className="form-control"
+                        onChange={(e) => this.setState({ search: e.target.value })}
+                    ></input>
+
                 </div>
                 <div className='table-container'>
                     <div className="user-manager">

@@ -9,7 +9,7 @@ class ModalIngredient extends Component {
         this.state = {
             name: "",
             category: "",
-            init: "",
+            unit: "",
             calo: "",
             protein: "",
             fat: "",
@@ -21,10 +21,10 @@ class ModalIngredient extends Component {
             fe: "",
             natri: "",
             kali: "",
-            betaCaroten: "",
-            vitA: "",
-            vitB1: "",
-            vitC: ""
+            betacaroten: "",
+            vita: "",
+            vitb1: "",
+            vitc: ""
         };
         this.listenEmitter();
     }
@@ -33,7 +33,7 @@ class ModalIngredient extends Component {
             this.setState({
                 name: "",
                 category: "",
-                init: "",
+                unit: "",
                 calo: "",
                 protein: "",
                 fat: "",
@@ -45,10 +45,10 @@ class ModalIngredient extends Component {
                 fe: "",
                 natri: "",
                 kali: "",
-                betaCaroten: "",
-                vitA: "",
-                vitB1: "",
-                vitC: ""
+                betacaroten: "",
+                vita: "",
+                vitb1: "",
+                vitc: ""
             });
         });
     }
@@ -59,10 +59,9 @@ class ModalIngredient extends Component {
             ...copyState,
         });
     };
-    handleAddNewUser = () => {
+    handleAddNewIngre = () => {
         if (this.checkValidateInput()) {
-            //Call api
-            this.props.createNewUser(this.state);
+            this.props.createNewIngre(this.state);
             //   console.log("data modal ", this.state);
         }
     }
@@ -71,22 +70,8 @@ class ModalIngredient extends Component {
         let arrInput = [
             "name",
             "category",
-            "init",
+            "unit",
             "calo",
-            "protein",
-            "fat",
-            "carb",
-            "fiber",
-            "cholesterol",
-            "canxi",
-            "photpho",
-            "fe",
-            "natri",
-            "kali",
-            "beta",
-            "vitA",
-            "vitB1",
-            "vitC",
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -101,6 +86,8 @@ class ModalIngredient extends Component {
     componentDidMount() { }
     toggle = () => {
         this.props.toggleUFromParent();
+        console.log("Hello")
+
     };
 
     render() {
@@ -154,18 +141,18 @@ class ModalIngredient extends Component {
                                     <input
                                         type="text"
                                         onChange={(event) => {
-                                            this.handleOnchange(event, "init");
+                                            this.handleOnchange(event, "unit");
                                         }}
                                         className="form-control"
-                                        name="init"
-                                        value={this.state.init}
+                                        name="unit"
+                                        value={this.state.unit}
                                     />
                                 </div>
                             </div>
                             <div className="form-group col-md-24">
                                 <label>Calo</label>
                                 <input
-                                    type="text"
+                                    type="number"
                                     onChange={(event) => {
                                         this.handleOnchange(event, "calo");
                                     }}
@@ -178,7 +165,7 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Protein</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "protein");
                                         }}
@@ -192,7 +179,7 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Chất béo</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "fat");
                                         }}
@@ -204,7 +191,7 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Carbonhydrates </label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "carb");
                                         }}
@@ -216,7 +203,7 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Chất xơ</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "fiber");
                                         }}
@@ -230,7 +217,7 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Cholesterol</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "cholesterol");
                                         }}
@@ -242,7 +229,7 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Canxi </label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "canxi");
                                         }}
@@ -254,7 +241,7 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Phốt pho</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "photpho");
                                         }}
@@ -268,7 +255,7 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Sắt</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "fe");
                                         }}
@@ -280,7 +267,7 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Natri </label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "natri");
                                         }}
@@ -292,7 +279,7 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Kali</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "kali");
                                         }}
@@ -306,13 +293,13 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-24">
                                     <label>Beta Caroten</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
-                                            this.handleOnchange(event, "betaCaroten");
+                                            this.handleOnchange(event, "betacaroten");
                                         }}
                                         className="form-control"
-                                        name="betaCaroten"
-                                        value={this.state.betaCaroten}
+                                        name="betacaroten"
+                                        value={this.state.betacaroten}
                                     />
                                 </div>
                             </div>
@@ -320,37 +307,37 @@ class ModalIngredient extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Vitamin A</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
-                                            this.handleOnchange(event, "vitA");
+                                            this.handleOnchange(event, "vita");
                                         }}
                                         className="form-control"
-                                        name="vitA"
-                                        value={this.state.vitA}
+                                        name="vita"
+                                        value={this.state.vita}
                                     />
                                 </div>
                                 <div className="form-group col-md-3">
                                     <label>Vitamin B1</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
-                                            this.handleOnchange(event, "vitB1");
+                                            this.handleOnchange(event, "vitb1");
                                         }}
                                         className="form-control"
-                                        name="vitB1"
-                                        value={this.state.vitB1}
+                                        name="vitb1"
+                                        value={this.state.vitb1}
                                     />
                                 </div>
                                 <div className="form-group col-md-3">
                                     <label>Vitamin C</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
-                                            this.handleOnchange(event, "vitC");
+                                            this.handleOnchange(event, "vitc");
                                         }}
                                         className="form-control"
-                                        name="vitC"
-                                        value={this.state.vitC}
+                                        name="vitc"
+                                        value={this.state.vitc}
                                     />
                                 </div>
                             </div>
@@ -361,7 +348,7 @@ class ModalIngredient extends Component {
                     <Button
                         color="primary "
                         className="px-3"
-                        onClick={() => this.handleAddNewUser()}
+                        onClick={() => this.handleAddNewIngre()}
                     >
                         Tạo mới
                     </Button>{" "}
