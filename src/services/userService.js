@@ -28,7 +28,13 @@ const newIngreService = (data) => {
 const deleteIngreService = () => {
     return axios.post(
         "http://localhost:8069/api/admin/delete-all-ingredient",
-        {Delete:1}
+        { Delete: 1 }
+    );
+};
+const getIngreService = (inputId) => {
+    return axios.get(
+        `http://localhost:8069/api/user/get-all-ingredient?id=${inputId}`
+    
     );
 };
 
@@ -40,4 +46,5 @@ export {
     deleteUserService,
     editUserService,
     handleLoginApi,
+    getIngreService,
 };

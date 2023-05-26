@@ -11,20 +11,20 @@ class ModalIngredient extends Component {
             category: "",
             unit: "",
             calo: "",
-            protein: "",
-            fat: "",
-            carb: "",
-            fiber: "",
-            cholesterol: "",
-            canxi: "",
-            photpho: "",
-            fe: "",
-            natri: "",
-            kali: "",
-            betacaroten: "",
-            vita: "",
-            vitb1: "",
-            vitc: ""
+            protein: "-1",
+            fat: "-1",
+            carb: "-1",
+            fiber: "-1",
+            cholesterol: "-1",
+            canxi: "-1",
+            photpho: "-1",
+            fe: "-1",
+            natri: "-1",
+            kali: "-1",
+            betacaroten: "-1",
+            vita: "-1",
+            vitb1: "-1",
+            vitc: "-1"
         };
         this.listenEmitter();
     }
@@ -35,20 +35,20 @@ class ModalIngredient extends Component {
                 category: "",
                 unit: "",
                 calo: "",
-                protein: "",
-                fat: "",
-                carb: "",
-                fiber: "",
-                cholesterol: "",
-                canxi: "",
-                photpho: "",
-                fe: "",
-                natri: "",
-                kali: "",
-                betacaroten: "",
-                vita: "",
-                vitb1: "",
-                vitc: ""
+                protein: "-1",
+                fat: "-1",
+                carb: "-1",
+                fiber: "-1",
+                cholesterol: "-1",
+                canxi: "-1",
+                photpho: "-1",
+                fe: "-1",
+                natri: "-1",
+                kali: "-1",
+                betacaroten: "-1",
+                vita: "-1",
+                vitb1: "-1",
+                vitc: "-1"
             });
         });
     }
@@ -64,6 +64,13 @@ class ModalIngredient extends Component {
             this.props.createNewIngre(this.state);
             //   console.log("data modal ", this.state);
         }
+    }
+    handleSetZero = (item) => {
+        let copyState = { ...this.state };
+        copyState[item] = "0"
+        this.setState({
+            ...copyState,
+        })
     }
     checkValidateInput = () => {
         let isValid = true;
@@ -86,7 +93,6 @@ class ModalIngredient extends Component {
     componentDidMount() { }
     toggle = () => {
         this.props.toggleUFromParent();
-        console.log("Hello")
 
     };
 
@@ -169,6 +175,7 @@ class ModalIngredient extends Component {
                                         onChange={(event) => {
                                             this.handleOnchange(event, "protein");
                                         }}
+                                        onClick={()=>this.handleSetZero("protein")}
                                         className="form-control"
                                         name="protein"
                                         value={this.state.protein}
@@ -184,6 +191,7 @@ class ModalIngredient extends Component {
                                             this.handleOnchange(event, "fat");
                                         }}
                                         className="form-control"
+                                        onClick={()=>this.handleSetZero("fat")}
                                         name="fat"
                                         value={this.state.fat}
                                     />
@@ -196,6 +204,7 @@ class ModalIngredient extends Component {
                                             this.handleOnchange(event, "carb");
                                         }}
                                         className="form-control"
+                                        onClick={()=>this.handleSetZero("carb")}
                                         name="carb"
                                         value={this.state.carb}
                                     />
@@ -208,6 +217,7 @@ class ModalIngredient extends Component {
                                             this.handleOnchange(event, "fiber");
                                         }}
                                         className="form-control"
+                                        onClick={()=>this.handleSetZero("fiber")}
                                         name="fiber"
                                         value={this.state.fiber}
                                     />
@@ -222,6 +232,7 @@ class ModalIngredient extends Component {
                                             this.handleOnchange(event, "cholesterol");
                                         }}
                                         className="form-control"
+                                        onClick={()=>this.handleSetZero("cholesterol")}
                                         name="cholesterol"
                                         value={this.state.cholesterol}
                                     />
@@ -234,6 +245,7 @@ class ModalIngredient extends Component {
                                             this.handleOnchange(event, "canxi");
                                         }}
                                         className="form-control"
+                                        onClick={()=>this.handleSetZero("canxi")}
                                         name="canxi"
                                         value={this.state.canxi}
                                     />
@@ -246,6 +258,7 @@ class ModalIngredient extends Component {
                                             this.handleOnchange(event, "photpho");
                                         }}
                                         className="form-control"
+                                        onClick={()=>this.handleSetZero("photpho")}
                                         name="photpho"
                                         value={this.state.photpho}
                                     />
@@ -260,6 +273,7 @@ class ModalIngredient extends Component {
                                             this.handleOnchange(event, "fe");
                                         }}
                                         className="form-control"
+                                        onClick={()=>this.handleSetZero("fe")}
                                         name="fe"
                                         value={this.state.fe}
                                     />
@@ -273,6 +287,7 @@ class ModalIngredient extends Component {
                                         }}
                                         className="form-control"
                                         name="natri"
+                                        onClick={()=>this.handleSetZero("natri")}
                                         value={this.state.natri}
                                     />
                                 </div>
@@ -284,6 +299,7 @@ class ModalIngredient extends Component {
                                             this.handleOnchange(event, "kali");
                                         }}
                                         className="form-control"
+                                        onClick={()=>this.handleSetZero("kali")}
                                         name="kali"
                                         value={this.state.kali}
                                     />
@@ -299,6 +315,7 @@ class ModalIngredient extends Component {
                                         }}
                                         className="form-control"
                                         name="betacaroten"
+                                        onClick={()=>this.handleSetZero("betacaroten")}
                                         value={this.state.betacaroten}
                                     />
                                 </div>
@@ -312,6 +329,7 @@ class ModalIngredient extends Component {
                                             this.handleOnchange(event, "vita");
                                         }}
                                         className="form-control"
+                                        onClick={()=>this.handleSetZero("vita")}
                                         name="vita"
                                         value={this.state.vita}
                                     />
@@ -325,6 +343,7 @@ class ModalIngredient extends Component {
                                         }}
                                         className="form-control"
                                         name="vitb1"
+                                        onClick={()=>this.handleSetZero("vitb1")}
                                         value={this.state.vitb1}
                                     />
                                 </div>
@@ -337,6 +356,7 @@ class ModalIngredient extends Component {
                                         }}
                                         className="form-control"
                                         name="vitc"
+                                        onClick={()=>this.handleSetZero("vitc")}
                                         value={this.state.vitc}
                                     />
                                 </div>
@@ -345,6 +365,7 @@ class ModalIngredient extends Component {
                     </div>
                 </ModalBody>
                 <ModalFooter>
+                    <p style={{color:"red"}}>Lưu ý : -1: Chưa có số liệu & 0: Hàm lương = 0 {"     "}</p>
                     <Button
                         color="primary "
                         className="px-3"
