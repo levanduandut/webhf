@@ -1,52 +1,81 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./ManageIngredient.scss";
 import * as XLSX from "xlsx";
-import ModalIngredient from './ModalIngredient';
-import { deleteIngreService, newIngreService, getIngreService ,deleteOneIngreService} from '../../services/userService';
+import ModalIngredient from "./ModalIngredient";
+import {
+    deleteIngreService,
+    newIngreService,
+    getIngreService,
+    deleteOneIngreService,
+    editIngreService,
+} from "../../services/userService";
 import { emitter } from "../../utils/emitter";
+import ModalEditIngredient from "./ModalEditIngredient";
 
 const ManageIngredient = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
+    const [ingreEdit, setIngreEdit] = useState({});
     const [search, setSearch] = useState("");
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     useEffect(() => {
         if (!localStorage.getItem("JWT")) {
-            navigate("/login")
+            navigate("/login");
         }
         handleGetIngre();
-    }, [])
+    }, []);
     async function handleGetIngre() {
         try {
             let response = await getIngreService("");
-            await setItems(response.data.ingre)
+            await setItems(response.data.ingre);
         } catch (error) {
             console.log(error);
         }
     }
-    
-    async function handleDeleteUser(id) {
+
+    async function handleDeleteIngre(id) {
         try {
             let response = await deleteOneIngreService(id);
             if (response && response.data.errCode !== 0) {
                 alert(response.message);
             } else {
-                handleGetIngre()
+                handleGetIngre();
             }
         } catch (error) {
             console.log(error);
         }
     }
-    function handleEditUser() {
-
+    function handleEditIngre(item) {
+        setIsOpenEditModal(true);
+        setIngreEdit(item);
     }
     function handleAddNew() {
         setIsOpenModal(true);
     }
+
+    function toggleUserEditMoDal() {
+        setIsOpenModal(!isOpenEditModal);
+    }
     function toggleUserMoDal() {
         setIsOpenModal(!isOpenModal);
     }
+    async function saveEditIngre(data) {
+        try {
+            let response = await editIngreService(data);
+            console.log(response)
+            if (response && response.data.errCode !== 0) {
+                alert(response.message);
+            } else {
+                await handleGetIngre();
+                setIsOpenEditModal(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     async function createNewIngre(data) {
         try {
             let response = await newIngreService([data]);
@@ -55,8 +84,8 @@ const ManageIngredient = () => {
                 alert(response.message);
             } else {
                 // await this.getAllUsersFrom();
-                handleGetIngre()
-                setIsOpenModal(false)
+                handleGetIngre();
+                setIsOpenModal(false);
                 emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
             }
         } catch (error) {
@@ -66,11 +95,11 @@ const ManageIngredient = () => {
     async function handleDeleteAllIngre() {
         try {
             let response = await deleteIngreService();
-            console.log(response)
+            console.log(response);
             if (response && response.data.errCode !== 0) {
                 alert(response.data.message);
             } else {
-                handleGetIngre()
+                handleGetIngre();
                 alert(response.data.message);
             }
         } catch (error) {
@@ -84,7 +113,7 @@ const ManageIngredient = () => {
             if (response && response.data.errCode !== 0) {
                 alert(response.message);
             } else {
-                handleGetIngre()
+                handleGetIngre();
             }
         } catch (error) {
             console.log(error);
@@ -112,7 +141,7 @@ const ManageIngredient = () => {
             fileReader.onerror = (error) => {
                 reject(error);
             };
-        })
+        });
         promise.then((d) => {
             handleAddExcelIngre(d);
         });
@@ -124,8 +153,16 @@ const ManageIngredient = () => {
                 toggleUFromParent={toggleUserMoDal}
                 createNewIngre={createNewIngre}
             />
+            {isOpenEditModal && (
+                <ModalEditIngredient
+                    isOpen={isOpenEditModal}
+                    toggleUFromParent={toggleUserEditMoDal}
+                    currentIngre={ingreEdit}
+                    saveIngre={saveEditIngre}
+                />
+            )}
             <h1>Quản lý thành phần</h1>
-            <div className='inputFile'>
+            <div className="inputFile">
                 <button
                     // onClick={() => handleAddNew()}
                     onClick={() => handleAddNew()}
@@ -135,7 +172,7 @@ const ManageIngredient = () => {
                 </button>
                 {" Hoặc "}
                 <h5>Nhập file Excel input dữ liệu :</h5>
-                <input type='file' onChange={(e) => readExcel(e)}></input>
+                <input type="file" onChange={(e) => readExcel(e)}></input>
                 <button
                     onClick={() => handleAddExcelIngre()}
                     className="button button5"
@@ -150,14 +187,14 @@ const ManageIngredient = () => {
                 </button>
             </div>
 
-            <div className='inputFile'>
+            <div className="inputFile">
                 <input
                     placeholder="Tìm kiếm "
                     className="form-control"
                     onChange={(e) => setSearch(e.target.value)}
                 ></input>
             </div>
-            <div className='table-container'>
+            <div className="table-container">
                 <table className="table container">
                     <thead>
                         <tr>
@@ -184,55 +221,55 @@ const ManageIngredient = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {items && items.filter((item) => {
-                            return search.toLowerCase() === ""
-                                ? item
-                                : item.name.toLowerCase().includes(search);
-                        })
-                            .map((d) => (
-                                <tr key={d.id}>
-                                    <td>{d.id}</td>
-                                    <td>{d.category}</td>
-                                    <td>{d.unit}</td>
-                                    <td>{d.name}</td>
-                                    <td>{d.calo}</td>
-                                    <td>{d.protein}</td>
-                                    <td>{d.fat}</td>
-                                    <td>{d.carb}</td>
-                                    <td>{d.fiber}</td>
-                                    <td>{d.cholesterol}</td>
-                                    <td>{d.canxi}</td>
-                                    <td>{d.photpho}</td>
-                                    <td>{d.fe}</td>
-                                    <td>{d.natri}</td>
-                                    <td>{d.kali}</td>
-                                    <td>{d.betacaroten}</td>
-                                    <td>{d.vita}</td>
-                                    <td>{d.vitb1}</td>
-                                    <td>{d.vitc}</td>
-                                    <td >
-                                        <div style={{ display: 'flex' }}>
-                                            <button
-                                                onClick={() => handleEditUser(d.id)}
-                                                className="buttonx button2"
-                                            >
-                                                Edit
-                                            </button>
-                                            <button
-                                                onClick={() => handleDeleteUser(d.id)}
-                                                className="buttonx button3"
-                                            >
-                                                Delete
-                                            </button>
-                                        </div>
-
-                                    </td>
-                                </tr>
-                            ))}
+                        {items &&
+                            items
+                                .filter((item) => {
+                                    return search.toLowerCase() === ""
+                                        ? item
+                                        : item.name.toLowerCase().includes(search);
+                                })
+                                .map((d) => (
+                                    <tr key={d.id}>
+                                        <td>{d.id}</td>
+                                        <td>{d.category}</td>
+                                        <td>{d.unit}</td>
+                                        <td>{d.name}</td>
+                                        <td>{d.calo}</td>
+                                        <td>{d.protein}</td>
+                                        <td>{d.fat}</td>
+                                        <td>{d.carb}</td>
+                                        <td>{d.fiber}</td>
+                                        <td>{d.cholesterol}</td>
+                                        <td>{d.canxi}</td>
+                                        <td>{d.photpho}</td>
+                                        <td>{d.fe}</td>
+                                        <td>{d.natri}</td>
+                                        <td>{d.kali}</td>
+                                        <td>{d.betacaroten}</td>
+                                        <td>{d.vita}</td>
+                                        <td>{d.vitb1}</td>
+                                        <td>{d.vitc}</td>
+                                        <td>
+                                            <div style={{ display: "flex" }}>
+                                                <button
+                                                    onClick={() => handleEditIngre(d)}
+                                                    className="buttonx button2"
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDeleteIngre(d.id)}
+                                                    className="buttonx button3"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
                     </tbody>
                 </table>
             </div>
-
         </div>
     );
 };

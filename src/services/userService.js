@@ -44,6 +44,10 @@ const getIngreService = (inputId) => {
     );
 };
 
+const editIngreService = (data) => {
+    return axios.put("http://localhost:8069/api/admin/edit-ingredient", data);
+};
+
 export {
     deleteIngreService,
     newIngreService,
@@ -54,4 +58,5 @@ export {
     handleLoginApi,
     getIngreService,
     deleteOneIngreService,
+    editIngreService,
 };
