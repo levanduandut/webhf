@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import "./ManageIngredient.scss";
 import * as XLSX from "xlsx";
 import ModalIngredient from './ModalIngredient';
-import { deleteIngreService, newIngreService, getIngreService } from '../../services/userService';
+import { deleteIngreService, newIngreService, getIngreService ,deleteOneIngreService} from '../../services/userService';
 import { emitter } from "../../utils/emitter";
 
 const ManageIngredient = () => {
@@ -20,17 +20,24 @@ const ManageIngredient = () => {
     async function handleGetIngre() {
         try {
             let response = await getIngreService("");
-            // if (response && response.data.errCode !== 0) {
-            //     alert(response.message);
-            // } else {
-            // await this.getAllUsersFrom();
             await setItems(response.data.ingre)
-            // }
         } catch (error) {
             console.log(error);
         }
     }
-
+    
+    async function handleDeleteUser(id) {
+        try {
+            let response = await deleteOneIngreService(id);
+            if (response && response.data.errCode !== 0) {
+                alert(response.message);
+            } else {
+                handleGetIngre()
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     function handleEditUser() {
 
     }
@@ -154,7 +161,7 @@ const ManageIngredient = () => {
                 <table className="table container">
                     <thead>
                         <tr>
-                            <th scope="col">STT</th>
+                            <th scope="col">Id</th>
                             <th scope="col">Phân Loại</th>
                             <th scope="col">Đơn vị</th>
                             <th scope="col">Tên</th>
@@ -206,13 +213,13 @@ const ManageIngredient = () => {
                                     <td >
                                         <div style={{ display: 'flex' }}>
                                             <button
-                                                onClick={() => handleEditUser(d)}
+                                                onClick={() => handleEditUser(d.id)}
                                                 className="buttonx button2"
                                             >
                                                 Edit
                                             </button>
                                             <button
-                                                onClick={() => this.handleDeleteUser(d)}
+                                                onClick={() => handleDeleteUser(d.id)}
                                                 className="buttonx button3"
                                             >
                                                 Delete

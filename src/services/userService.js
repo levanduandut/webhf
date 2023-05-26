@@ -31,6 +31,12 @@ const deleteIngreService = () => {
         { Delete: 1 }
     );
 };
+const deleteOneIngreService = (id) => {
+    return axios.post(
+        "http://localhost:8069/api/admin/delete-ingredient",
+         { id: id }
+    );
+};
 const getIngreService = (inputId) => {
     return axios.get(
         `http://localhost:8069/api/user/get-all-ingredient?id=${inputId}`
@@ -47,4 +53,5 @@ export {
     editUserService,
     handleLoginApi,
     getIngreService,
+    deleteOneIngreService,
 };
