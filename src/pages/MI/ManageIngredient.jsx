@@ -54,9 +54,8 @@ const ManageIngredient = () => {
     function handleAddNew() {
         setIsOpenModal(true);
     }
-
     function toggleUserEditMoDal() {
-        setIsOpenModal(!isOpenEditModal);
+        setIsOpenEditModal(!isOpenEditModal);
     }
     function toggleUserMoDal() {
         setIsOpenModal(!isOpenModal);
@@ -64,7 +63,6 @@ const ManageIngredient = () => {
     async function saveEditIngre(data) {
         try {
             let response = await editIngreService(data);
-            console.log(response)
             if (response && response.data.errCode !== 0) {
                 alert(response.message);
             } else {
@@ -75,7 +73,6 @@ const ManageIngredient = () => {
             console.log(error);
         }
     }
-
     async function createNewIngre(data) {
         try {
             let response = await newIngreService([data]);
@@ -119,7 +116,6 @@ const ManageIngredient = () => {
             console.log(error);
         }
     }
-
     function readExcel(e) {
         const file = e.target.files[0];
         const promise = new Promise(async (resolve, reject) => {
@@ -205,8 +201,8 @@ const ManageIngredient = () => {
                             <th scope="col">Calo</th>
                             <th scope="col">Protein</th>
                             <th scope="col">Chất béo</th>
+                            <th scope="col">Tinh bột</th>
                             <th scope="col">Chất xơ</th>
-                            <th scope="col">Fiber</th>
                             <th scope="col">Cholesterol</th>
                             <th scope="col">Canxi</th>
                             <th scope="col">Photpho</th>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { FaUserAlt, FaTh, FaBars } from "react-icons/fa";
+import { FaUserAlt, FaTh, FaBars , FaBloggerB} from "react-icons/fa";
 import { GiBodyBalance } from "react-icons/gi";
-import { MdOutlineFastfood, MdManageAccounts } from "react-icons/md";
+import { MdOutlineFastfood, MdManageAccounts,MdOutlineSick } from "react-icons/md";
 import { SiGoogletagmanager } from "react-icons/si";
 import { NavLink, redirect, useNavigate } from "react-router-dom";
 const Sidebar = ({ children }) => {
@@ -13,19 +13,22 @@ const Sidebar = ({ children }) => {
         if (!localStorage.getItem("JWT")) {
             navigate("/login");
         }
-    })
-    
-    // eslint-disable-next-line
+    },[])
     const menuItem = [
-        {
-            path: "/",
-            name: "Dashboard",
-            icon: <FaTh />,
-        },
         {
             path: "/about",
             name: "Thông tin tài khoản",
             icon: <FaUserAlt />,
+        },
+        {
+            path: "/manageBlog",
+            name: "Quản lý bài viết",
+            icon: <FaBloggerB />,
+        },
+        {
+            path: "/manageSick",
+            name: "Quản lý bệnh",
+            icon: <MdOutlineSick />,
         },
         {
             path: "/manageExercise",
@@ -52,8 +55,7 @@ const Sidebar = ({ children }) => {
         
         localStorage.clear("JWT");
         localStorage.setItem("isLogin", false);
-        // navigate("/login");
-        
+        navigate("/login");
     }
     return (
         <div className="containerX">

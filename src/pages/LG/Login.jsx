@@ -33,7 +33,7 @@ const Login = () => {
                     // this.props.userLoginSuccess(data.user)
                     localStorage.setItem("JWT", data.data.token);
                     localStorage.setItem("isLogin", true);
-                    navigate("/dashboard")
+                    navigate("/about")
                 }
             } catch (error) {
                 if (error.response) {

@@ -60,12 +60,6 @@ class ModalEditIngredient extends Component {
             ...copyState,
         });
     };
-    handleAddNewIngre = () => {
-        if (this.checkValidateInput()) {
-            this.props.createNewIngre(this.state);
-            //   console.log("data modal ", this.state);
-        }
-    }
     handleSetZero = (item) => {
         let copyState = { ...this.state };
         copyState[item] = "0"

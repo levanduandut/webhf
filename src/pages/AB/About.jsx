@@ -9,8 +9,8 @@ const About = () => {
         }
     })
     async function handleLogOut() {
-        // await localStorage.clear("JWT");
-        // localStorage.setItem("isLogin", false);
+        await localStorage.clear("JWT");
+        localStorage.setItem("isLogin", false);
         navigate("/login");
     }
     return (
