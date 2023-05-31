@@ -9,7 +9,7 @@ const ManageBlog = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [blogEdit, setBlogEdit] = useState({});
-    const [search, setSearch] = useState("");
+    const [search, setSearch] = useState("");   
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     useEffect(() => {
@@ -17,7 +17,7 @@ const ManageBlog = () => {
             navigate("/login")
         }
         handleGetBlog();
-    },[]);
+    }, []);
 
     function toggleBlogModal() {
         setIsOpenModal(!isOpenModal);
@@ -79,15 +79,15 @@ const ManageBlog = () => {
                 >
                     Thêm bài viết
                 </button>
-                {" Hoặc "}
-                <h5>Nhập file Excel input dữ liệu :</h5>
-                {/* <input type="file" onChange={(e) => readExcel(e)}></input> */}
+                {/* {" Hoặc "} */}
+                {/* <h5>Nhập file Excel input dữ liệu :</h5>
+                <input type="file" onChange={(e) => readExcel(e)}></input>
                 <button
                     // onClick={() => handleAddExcelIngre()}
                     className="button button5"
                 >
                     Ghi dữ liệu vào database
-                </button>
+                </button> */}
                 <button
                     // onClick={() => handleDeleteAllIngre()}
                     className="button button6"
@@ -100,7 +100,7 @@ const ManageBlog = () => {
                 <input
                     placeholder="Tìm kiếm "
                     className="form-control"
-                // onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value)}
                 ></input>
             </div>
             <div className="table-container">
@@ -121,7 +121,7 @@ const ManageBlog = () => {
                                 .filter((item) => {
                                     return search.toLowerCase() === ""
                                         ? item
-                                        : item.name.toLowerCase().includes(search);
+                                        : item.title.toLowerCase().includes(search);
                                 })
                                 .map((d) => (
                                     <tr key={d.id}>
