@@ -4,14 +4,18 @@ import { useNavigate } from 'react-router-dom';
 import "./Blog.scss";
 import AddBlog from './AddBlog';
 import { emitter } from "../../utils/emitter";
-import { getBlogService ,newBlogService} from '../../services/userService';
+import { getBlogService, newBlogService, deleteOneBlogService } from '../../services/userService';
+import { Alert } from 'reactstrap';
 const ManageBlog = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [blogEdit, setBlogEdit] = useState({});
-    const [search, setSearch] = useState("");   
+    const [search, setSearch] = useState("");
+    const [message, setMessage] = useState("");
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+    const [visible, setVisible] = useState(false);
+    const onDismiss = () => setVisible(false);
     useEffect(() => {
         if (!localStorage.getItem("JWT")) {
             navigate("/login")
@@ -22,16 +26,24 @@ const ManageBlog = () => {
     function toggleBlogModal() {
         setIsOpenModal(!isOpenModal);
     }
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    function showAlert(message, time) {
+        setMessage(message);
+        setVisible(true);
+        sleep(time).then(() => { setVisible(false); });
+    }
     async function createNewBlog(data) {
         try {
             let response = await newBlogService([data]);
             console.log(response.data);
             if (response && response.data.errCode !== 0) {
-                alert(response.message);
+                setMessage(response.message)
             } else {
-                // await this.getAllUsersFrom();
                 handleGetBlog();
                 setIsOpenModal(false);
+                showAlert("Thêm mới blog thành công !", 2500);
                 emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
             }
         } catch (error) {
@@ -57,14 +69,32 @@ const ManageBlog = () => {
             console.log(error);
         }
     }
+
+    async function handleDeleteBlog(id) {
+        try {
+            let response = await deleteOneBlogService(id);
+            if (response && response.data.errCode !== 0) {
+                alert(response.message);
+            } else {
+                handleGetBlog();
+                setIsOpenModal(false);
+                showAlert("Xóa blog thành công !", 2500);
+                setVisible(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div>
             <AddBlog
-            isOpen={isOpenModal}
-            toggleUFromParent={toggleBlogModal}
-            createNewBlog={createNewBlog}
+                isOpen={isOpenModal}
+                toggleUFromParent={toggleBlogModal}
+                createNewBlog={createNewBlog}
             />
-
+            <Alert color="info" isOpen={visible} toggle={onDismiss}>
+                {message}
+            </Alert>
             {/*{isOpenEditModal && (
             <ModalEditIngredient
                 isOpen={isOpenEditModal}
@@ -141,7 +171,7 @@ const ManageBlog = () => {
                                                     Edit
                                                 </button>
                                                 <button
-                                                    // onClick={() => handleDeleteIngre(d.id)}
+                                                    onClick={() => handleDeleteBlog(d.id)}
                                                     className="buttonx button3"
                                                 >
                                                     Delete

@@ -57,6 +57,12 @@ const newBlogService = (data) => {
         data
     );
 };
+const deleteOneBlogService = (id) => {
+    return axios.post(
+        "http://localhost:8069/api/admin/delete-blog",
+         { id: id }
+    );
+};
 
 export {
     deleteIngreService,
@@ -70,5 +76,6 @@ export {
     deleteOneIngreService,
     editIngreService,
     getBlogService,
-    newBlogService
+    newBlogService,
+    deleteOneBlogService,
 };
