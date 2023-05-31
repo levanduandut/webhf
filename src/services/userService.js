@@ -51,6 +51,12 @@ const getBlogService = (inputId) => {
         `http://localhost:8069/api/user/get-all-blog?id=${inputId}`
     );
 };
+const newBlogService = (data) => {
+    return axios.post(
+        "http://localhost:8069/api/admin/create-new-blog",
+        data
+    );
+};
 
 export {
     deleteIngreService,
@@ -64,4 +70,5 @@ export {
     deleteOneIngreService,
     editIngreService,
     getBlogService,
+    newBlogService
 };

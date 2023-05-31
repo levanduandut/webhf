@@ -49,7 +49,7 @@ class AddBlog extends Component {
             "tag",
             "star",
             "detail",
-            "image",
+            // "image",
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -76,6 +76,7 @@ class AddBlog extends Component {
                 className={"modal-user"}
                 scrollable={true}
                 centered
+                fullscreen
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
@@ -103,12 +104,12 @@ class AddBlog extends Component {
                                     <input
                                         type="text"
                                         onChange={(event) => {
-                                            this.handleOnchange(event, "category");
+                                            this.handleOnchange(event, "categoryId");
                                         }}
                                         className="form-control"
-                                        name="category"
-                                        value={this.state.category}
-                                    />
+                                        name="categoryId"
+                                        value={this.state.categoryId}
+                                    /> 
                                 </div>
                             </div>
                             <div className="form-row">
@@ -139,8 +140,7 @@ class AddBlog extends Component {
                             </div>
                             <div className="form-group col-md-24">
                                 <label>Nội dung</label>
-                                <input
-                                    type="text"
+                                <textarea
                                     onChange={(event) => {
                                         this.handleOnchange(event, "detail");
                                     }}

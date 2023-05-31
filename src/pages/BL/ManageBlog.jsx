@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import "./Blog.scss";
 import AddBlog from './AddBlog';
 import { emitter } from "../../utils/emitter";
-import { getBlogService } from '../../services/userService';
+import { getBlogService ,newBlogService} from '../../services/userService';
 const ManageBlog = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
@@ -22,30 +22,33 @@ const ManageBlog = () => {
     function toggleBlogModal() {
         setIsOpenModal(!isOpenModal);
     }
-    // async function createNewBlog(data) {
-    //     try {
-    //         let response = await newBlogService([data]);
-    //         console.log(response.data);
-    //         if (response && response.data.errCode !== 0) {
-    //             alert(response.message);
-    //         } else {
-    //             // await this.getAllUsersFrom();
-    //             handleGetBlog();
-    //             setIsOpenModal(false);
-    //             emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-    // async function handleGetBlog() {
-    //     try {
-    //         let response = await getBlogService("");
-    //         await setItems(response.data.ingre);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    async function createNewBlog(data) {
+        try {
+            let response = await newBlogService([data]);
+            console.log(response.data);
+            if (response && response.data.errCode !== 0) {
+                alert(response.message);
+            } else {
+                // await this.getAllUsersFrom();
+                handleGetBlog();
+                setIsOpenModal(false);
+                emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async function handleGetBlog() {
+        try {
+            let response = await getBlogService("");
+            await setItems(response.data.ingre);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    function handleAddNew() {
+        setIsOpenModal(true);
+    }
     async function handleGetBlog() {
         try {
             let response = await getBlogService("");
@@ -56,11 +59,11 @@ const ManageBlog = () => {
     }
     return (
         <div>
-            {/* <AddBlog
-            isOpen={true}
+            <AddBlog
+            isOpen={isOpenModal}
             toggleUFromParent={toggleBlogModal}
-            // createNewBlog={createNewIngre}
-            /> */}
+            createNewBlog={createNewBlog}
+            />
 
             {/*{isOpenEditModal && (
             <ModalEditIngredient
@@ -73,8 +76,7 @@ const ManageBlog = () => {
             <h1>Quản lí Blog</h1>
             <div className="inputFile">
                 <button
-                    // onClick={() => handleAddNew()}
-                    // onClick={() => handleAddNew()}
+                    onClick={() => handleAddNew()}
                     className="button button4"
                 >
                     Thêm bài viết
