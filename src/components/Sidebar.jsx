@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { FaUserAlt, FaTh, FaBars , FaBloggerB} from "react-icons/fa";
+import { FaUserAlt, FaTh, FaBars, FaBloggerB } from "react-icons/fa";
 import { GiBodyBalance } from "react-icons/gi";
-import { MdOutlineFastfood, MdManageAccounts,MdOutlineSick } from "react-icons/md";
+import { MdOutlineFastfood, MdManageAccounts, MdOutlineSick } from "react-icons/md";
 import { SiGoogletagmanager } from "react-icons/si";
 import { NavLink, redirect, useNavigate } from "react-router-dom";
+import logo from "../Others/logo.png";
 const Sidebar = ({ children }) => {
 
     const navigate = useNavigate()
@@ -13,7 +14,7 @@ const Sidebar = ({ children }) => {
         if (!localStorage.getItem("JWT")) {
             navigate("/login");
         }
-    },[])
+    }, [])
     const menuItem = [
         {
             path: "/about",
@@ -52,7 +53,7 @@ const Sidebar = ({ children }) => {
         },
     ];
     function handleLogOut() {
-        
+
         localStorage.clear("JWT");
         localStorage.setItem("isLogin", false);
         navigate("/login");
@@ -61,9 +62,7 @@ const Sidebar = ({ children }) => {
         <div className="containerX">
             <div style={{ width: isOpen ? "600px" : "50px" }} className="sidebar">
                 <div className="top_section">
-                    <h1 style={{ display: isOpen ? "block" : "none" }} className="Logo">
-                        Logo
-                    </h1>
+                    <img style={{ display: isOpen ? "block" : "none", width: '6rem', height: '6rem', marginLeft:'3rem' }} src={logo} alt="Logo" />
                     <div
                         style={{ marginLeft: isOpen ? "100px" : "-2px" }}
                         className="bars"

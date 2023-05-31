@@ -43,9 +43,13 @@ const getIngreService = (inputId) => {
     
     );
 };
-
 const editIngreService = (data) => {
     return axios.put("http://localhost:8069/api/admin/edit-ingredient", data);
+};
+const getBlogService = (inputId) => {
+    return axios.get(
+        `http://localhost:8069/api/user/get-all-blog?id=${inputId}`
+    );
 };
 
 export {
@@ -59,4 +63,5 @@ export {
     getIngreService,
     deleteOneIngreService,
     editIngreService,
+    getBlogService,
 };
