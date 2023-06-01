@@ -11,6 +11,7 @@ const ManageBlog = () => {
     const [items, setItems] = useState([]);
     const [blogEdit, setBlogEdit] = useState({});
     const [search, setSearch] = useState("");
+    const [colorAlert, setColorAlert] = useState("info");
     const [message, setMessage] = useState("");
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
@@ -29,21 +30,30 @@ const ManageBlog = () => {
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-    function showAlert(message, time) {
+    function showAlert(message, time, color) {
         setMessage(message);
+        setColorAlert(color)
         setVisible(true);
         sleep(time).then(() => { setVisible(false); });
     }
     async function createNewBlog(data) {
         try {
-            let response = await newBlogService([data]);
+            const formData = new FormData();
+            console.log(data.title);
+            formData.append("title", data.title);
+            formData.append("categoryId", data.categoryId);
+            formData.append("tag", data.tag);
+            formData.append("star", data.star);
+            formData.append("detail", data.detail);
+            formData.append("image", data.image);
+            let response = await newBlogService(formData);
             console.log(response.data);
             if (response && response.data.errCode !== 0) {
                 setMessage(response.message)
             } else {
                 handleGetBlog();
                 setIsOpenModal(false);
-                showAlert("Thêm mới blog thành công !", 2500);
+                showAlert("Thêm mới blog thành công !", 2500, "info");
                 emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
             }
         } catch (error) {
@@ -78,7 +88,7 @@ const ManageBlog = () => {
             } else {
                 handleGetBlog();
                 setIsOpenModal(false);
-                showAlert("Xóa blog thành công !", 2500);
+                showAlert("Xóa blog thành công !", 2500, "primary");
                 setVisible(true);
             }
         } catch (error) {
@@ -92,7 +102,7 @@ const ManageBlog = () => {
                 toggleUFromParent={toggleBlogModal}
                 createNewBlog={createNewBlog}
             />
-            <Alert color="info" isOpen={visible} toggle={onDismiss}>
+            <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
                 {message}
             </Alert>
             {/*{isOpenEditModal && (
@@ -144,6 +154,7 @@ const ManageBlog = () => {
                             <th scope="col">Phân loại</th>
                             <th scope="col">Tag</th>
                             <th scope="col">Sao</th>
+                            <th scope="col">Image</th>
                             <th scope="col">Hành động</th>
                         </tr>
                     </thead>
@@ -162,6 +173,13 @@ const ManageBlog = () => {
                                         <td>{d.categoryId}</td>
                                         <td>{d.tag}</td>
                                         <td>{d.star}</td>
+                                        <td>
+                                            <div>
+                                                <img style={{ width: '50px', height: '50px' }} src={`http://localhost:8069/${d.image}`} />
+                                            </div>
+
+                                            {console.log(`http://localhost:8069/${d.image}`)}
+                                        </td>
                                         <td>
                                             <div style={{ display: "flex" }}>
                                                 <button

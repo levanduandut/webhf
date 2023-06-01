@@ -8,19 +8,19 @@ class ModalUser extends Component {
         super(props);
         this.state = {
             email: "",
-            age:"",
+            age: "",
             password: "",
             fullName: "",
             address: "",
             gender: "",
             roleId: "",
         };
-        this.listenEmitter();
+
     }
     listenEmitter() {
         emitter.on("EVENT_CLEAR_MODAL", () => {
             this.setState({
-                age:"",
+                age: "",
                 email: "",
                 password: "",
                 fullName: "",
@@ -65,7 +65,9 @@ class ModalUser extends Component {
         return isValid;
     };
 
-    componentDidMount() { }
+    componentDidMount() {
+        this.listenEmitter();
+    }
     toggle = () => {
         this.props.toggleUFromParent();
     };

@@ -7,14 +7,14 @@ class AddBlog extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            image: '',
             title: '',
             categoryId: '',
             tag: '',
             star: '',
             detail: '',
-            image: '',
         };
-        this.listenEmitter();
+
     }
     listenEmitter() {
         emitter.on("EVENT_CLEAR_MODAL", () => {
@@ -30,10 +30,19 @@ class AddBlog extends Component {
     }
     handleOnchange = (event, item) => {
         let copyState = { ...this.state };
-        copyState[item] = event.target.value;
-        this.setState({
-            ...copyState,
-        });
+        if (item !== "image") {
+            copyState[item] = event.target.value;
+            this.setState({
+                ...copyState,
+            });
+        }
+        else {
+            copyState[item] = event.target.files[0];
+            this.setState({
+                ...copyState,
+            });
+        }
+
     };
     handleAddNewBlog = () => {
         if (this.checkValidateInput()) {
@@ -61,10 +70,11 @@ class AddBlog extends Component {
         return isValid;
     };
 
-    componentDidMount() { }
+    componentDidMount() {
+        this.listenEmitter();
+    }
     toggle = () => {
         this.props.toggleUFromParent();
-
     };
 
     render() {
@@ -109,7 +119,7 @@ class AddBlog extends Component {
                                         className="form-control"
                                         name="categoryId"
                                         value={this.state.categoryId}
-                                    /> 
+                                    />
                                 </div>
                             </div>
                             <div className="form-row">
@@ -152,13 +162,13 @@ class AddBlog extends Component {
                             <div className="form-group col-md-24">
                                 <label>File hình ảnh</label>
                                 <input
+                                    multiple
                                     type="file"
                                     onChange={(event) => {
                                         this.handleOnchange(event, "image");
                                     }}
                                     className="form-control"
                                     name="image"
-                                    value={this.state.image}
                                 />
                             </div>
                         </div>

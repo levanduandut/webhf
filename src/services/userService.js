@@ -34,13 +34,13 @@ const deleteIngreService = () => {
 const deleteOneIngreService = (id) => {
     return axios.post(
         "http://localhost:8069/api/admin/delete-ingredient",
-         { id: id }
+        { id: id }
     );
 };
 const getIngreService = (inputId) => {
     return axios.get(
         `http://localhost:8069/api/user/get-all-ingredient?id=${inputId}`
-    
+
     );
 };
 const editIngreService = (data) => {
@@ -53,14 +53,13 @@ const getBlogService = (inputId) => {
 };
 const newBlogService = (data) => {
     return axios.post(
-        "http://localhost:8069/api/admin/create-new-blog",
-        data
+        "http://localhost:8069/api/admin/create-new-blog", data
     );
 };
 const deleteOneBlogService = (id) => {
     return axios.post(
         "http://localhost:8069/api/admin/delete-blog",
-         { id: id }
+        { id: id }
     );
 };
 
