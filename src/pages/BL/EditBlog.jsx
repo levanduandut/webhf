@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { emitter } from "../../utils/emitter";
-import "./Blog.scss"
+import "./Blog.scss";
+import _ from "lodash";
 // import { connect } from "react-redux";
-class AddBlog extends Component {
+class EditBlog extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,12 +20,12 @@ class AddBlog extends Component {
     listenEmitter() {
         emitter.on("EVENT_CLEAR_MODAL", () => {
             this.setState({
+                image: '',
                 title: '',
                 categoryId: '',
                 tag: '',
                 star: '',
                 detail: '',
-                image: '',
             });
         });
     }
@@ -42,14 +43,7 @@ class AddBlog extends Component {
                 ...copyState,
             });
         }
-
     };
-    handleAddNewBlog = () => {
-        if (this.checkValidateInput()) {
-            this.props.createNewBlog(this.state);
-            //   console.log("data modal ", this.state);
-        }
-    }
     checkValidateInput = () => {
         let isValid = true;
         let arrInput = [
@@ -58,7 +52,7 @@ class AddBlog extends Component {
             "tag",
             "star",
             "detail",
-            "image",
+            // "image",
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -71,8 +65,24 @@ class AddBlog extends Component {
     };
 
     componentDidMount() {
-        this.listenEmitter();
+        let blog = this.props.currentBlog;
+        if (blog && !_.isEmpty(blog)) {
+            this.setState({
+                id: blog.id,
+                title: blog.title,
+                categoryId: blog.categoryId,
+                tag: blog.tag,
+                star: blog.star,
+                detail: blog.detail,
+                image: blog.image,
+            });
+        }
     }
+    handleSaveBlog = () => {
+        if (this.checkValidateInput()) {
+            this.props.saveBlog(this.state);
+        }
+    };
     toggle = () => {
         this.props.toggleUFromParent();
     };
@@ -90,7 +100,7 @@ class AddBlog extends Component {
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
-                    Thêm mới bài viết
+                    Chỉnh sửa bài viết
                 </ModalHeader>
                 <ModalBody>
                     <div className="container">
@@ -184,9 +194,9 @@ class AddBlog extends Component {
                     <Button
                         color="primary "
                         className="px-3"
-                        onClick={() => this.handleAddNewBlog()}
+                        onClick={() => this.handleSaveBlog()}
                     >
-                        Tạo mới
+                        Lưu
                     </Button>{" "}
                     <Button
                         color="danger "
@@ -201,4 +211,5 @@ class AddBlog extends Component {
     }
 }
 
-export default AddBlog;
+
+export default EditBlog;

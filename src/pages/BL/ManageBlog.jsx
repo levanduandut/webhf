@@ -4,8 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import "./Blog.scss";
 import AddBlog from './AddBlog';
 import { emitter } from "../../utils/emitter";
-import { getBlogService, newBlogService, deleteOneBlogService } from '../../services/userService';
+import { getBlogService, newBlogService, deleteOneBlogService, deleteBlogService, editBlogService, newBlogExcelService } from '../../services/userService';
 import { Alert } from 'reactstrap';
+import * as XLSX from "xlsx";
+import EditBlog from './EditBlog';
 const ManageBlog = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
@@ -39,7 +41,6 @@ const ManageBlog = () => {
     async function createNewBlog(data) {
         try {
             const formData = new FormData();
-            console.log(data.title);
             formData.append("title", data.title);
             formData.append("categoryId", data.categoryId);
             formData.append("tag", data.tag);
@@ -47,7 +48,6 @@ const ManageBlog = () => {
             formData.append("detail", data.detail);
             formData.append("image", data.image);
             let response = await newBlogService(formData);
-            console.log(response.data);
             if (response && response.data.errCode !== 0) {
                 setMessage(response.message)
             } else {
@@ -58,14 +58,7 @@ const ManageBlog = () => {
             }
         } catch (error) {
             console.log(error);
-        }
-    }
-    async function handleGetBlog() {
-        try {
-            let response = await getBlogService("");
-            await setItems(response.data.ingre);
-        } catch (error) {
-            console.log(error);
+            showAlert("Lỗi không thêm được blog!", 2500, "danger");
         }
     }
     function handleAddNew() {
@@ -75,21 +68,96 @@ const ManageBlog = () => {
         try {
             let response = await getBlogService("");
             await setItems(response.data.blog);
+            showAlert("Đã load tất cả blog !", 2500, "primary");
         } catch (error) {
             console.log(error);
         }
     }
-
     async function handleDeleteBlog(id) {
         try {
             let response = await deleteOneBlogService(id);
             if (response && response.data.errCode !== 0) {
-                alert(response.message);
+                showAlert("Xóa blog không thành công !", 2500, "primary");
             } else {
                 handleGetBlog();
                 setIsOpenModal(false);
                 showAlert("Xóa blog thành công !", 2500, "primary");
                 setVisible(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async function handleDeleteAllBlog() {
+        try {
+            let response = await deleteBlogService();
+            if (response && response.data.errCode !== 0) {
+                showAlert("Xóa không thành công !", 2500, "danger");
+            } else {
+                handleGetBlog();
+                showAlert("Đã xóa tất cả Blog !", 2500, "danger");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    function handleEditBlog(item) {
+        setIsOpenEditModal(true);
+        setBlogEdit(item);
+    }
+    async function saveEditBlog(data) {
+        try {
+            const formData = new FormData();
+            formData.append("id", data.id);
+            formData.append("title", data.title);
+            formData.append("categoryId", data.categoryId);
+            formData.append("tag", data.tag);
+            formData.append("star", data.star);
+            formData.append("detail", data.detail);
+            formData.append("image", data.image);
+            let response = await editBlogService(formData);
+            console.log(response.data.message);
+            if (response && response.data.errCode !== 0) {
+                alert(response.data.message);
+            } else {
+                await handleGetBlog();
+                setIsOpenEditModal(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    function toggleBlogEditMoDal() {
+        setIsOpenEditModal(!isOpenEditModal);
+    }
+    function readExcel(e) {
+        const file = e.target.files[0];
+        const promise = new Promise(async (resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsArrayBuffer(file);
+            fileReader.onload = (e) => {
+                const bufferArray = e.target.result;
+                const wb = XLSX.read(bufferArray, { type: "buffer" });
+                const wsname = wb.SheetNames[0];
+                const ws = wb.Sheets[wsname];
+                const data = XLSX.utils.sheet_to_json(ws);
+                resolve(data);
+            };
+            fileReader.onerror = (error) => {
+                reject(error);
+            };
+        });
+        promise.then((d) => {
+            handleAddExcelBlog(d);
+        });
+    }
+    async function handleAddExcelBlog(items) {
+        try {
+            let response = await newBlogExcelService(items);
+            if (response && response.data.errCode !== 0) {
+                alert(response.message);
+            } else {
+                handleGetBlog();
             }
         } catch (error) {
             console.log(error);
@@ -105,14 +173,14 @@ const ManageBlog = () => {
             <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
                 {message}
             </Alert>
-            {/*{isOpenEditModal && (
-            <ModalEditIngredient
-                isOpen={isOpenEditModal}
-                toggleUFromParent={toggleUserEditMoDal}
-                currentIngre={ingreEdit}
-                saveIngre={saveEditIngre}
-            />
-        )} */}
+            {isOpenEditModal && (
+                <EditBlog
+                    isOpen={true}
+                    toggleUFromParent={toggleBlogEditMoDal}
+                    currentBlog={blogEdit}
+                    saveBlog={saveEditBlog}
+                />
+            )}
             <h1>Quản lí Blog</h1>
             <div className="inputFile">
                 <button
@@ -121,17 +189,17 @@ const ManageBlog = () => {
                 >
                     Thêm bài viết
                 </button>
-                {/* {" Hoặc "} */}
-                {/* <h5>Nhập file Excel input dữ liệu :</h5>
+                {" Hoặc "}
+                <h5>Nhập file Excel input dữ liệu :</h5>
                 <input type="file" onChange={(e) => readExcel(e)}></input>
                 <button
                     // onClick={() => handleAddExcelIngre()}
                     className="button button5"
                 >
                     Ghi dữ liệu vào database
-                </button> */}
+                </button>
                 <button
-                    // onClick={() => handleDeleteAllIngre()}
+                    onClick={() => handleDeleteAllBlog()}
                     className="button button6"
                 >
                     Xóa toàn bộ dữ liệu
@@ -175,15 +243,13 @@ const ManageBlog = () => {
                                         <td>{d.star}</td>
                                         <td>
                                             <div>
-                                                <img style={{ width: '50px', height: '50px' }} src={`http://localhost:8069/${d.image}`} />
+                                                <img style={{ width: '50px', height: '50px' }} src={`https://storage.googleapis.com/healthfood-do/${d.image}`} />
                                             </div>
-
-                                            {console.log(`http://localhost:8069/${d.image}`)}
                                         </td>
                                         <td>
                                             <div style={{ display: "flex" }}>
                                                 <button
-                                                    // onClick={() => handleEditIngre(d)}
+                                                    onClick={() => handleEditBlog(d)}
                                                     className="buttonx button2"
                                                 >
                                                     Edit
