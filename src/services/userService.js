@@ -90,6 +90,12 @@ const newSickService = (data) => {
     );
 };
 
+const newSickExcelService = (data) => {
+    return axios.post(
+        "http://localhost:8069/api/admin/create-excel-sick", data
+    );
+};
+
 export {
     deleteIngreService,
     newIngreService,
@@ -109,4 +115,5 @@ export {
     newBlogExcelService,
     getSickService,
     newSickService,
+    newSickExcelService
 };
