@@ -89,11 +89,19 @@ const newSickService = (data) => {
         "http://localhost:8069/api/admin/create-new-sick", data
     );
 };
-
 const newSickExcelService = (data) => {
     return axios.post(
         "http://localhost:8069/api/admin/create-excel-sick", data
     );
+};
+const deleteOneSickService = (id) => {
+    return axios.post(
+        "http://localhost:8069/api/admin/delete-sick",
+        { id: id }
+    );
+};
+const editSickService = (data) => {
+    return axios.put("http://localhost:8069/api/admin/edit-sick", data);
 };
 
 export {
@@ -115,5 +123,7 @@ export {
     newBlogExcelService,
     getSickService,
     newSickService,
-    newSickExcelService
+    newSickExcelService,
+    deleteOneSickService,
+    editSickService,
 };

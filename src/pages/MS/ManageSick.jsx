@@ -4,13 +4,15 @@ import { emitter } from "../../utils/emitter";
 import AddSick from './AddSick';
 import { Alert } from 'reactstrap';
 import * as XLSX from "xlsx";
-import { getSickService, newSickExcelService, newSickService } from '../../services/userService';
+import { deleteOneSickService, editSickService, getSickService, newSickExcelService, newSickService } from '../../services/userService';
+import EditSick from './EditSick';
 const ManageSick = () => {
     const navigate = useNavigate();
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     const [visible, setVisible] = useState(false);
     const [message, setMessage] = useState("");
+    const [sickEdit, setSickEdit] = useState({});
     const [items, setItems] = useState([]);
     const [search, setSearch] = useState("");
     const [dataExcel, setDataExcel] = useState([]);
@@ -21,13 +23,14 @@ const ManageSick = () => {
             navigate("/login")
         }
         handleGetSick();
+        showAlert("Đã load tất cả bệnh !", 2500, "primary");
     }, [])
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
     function showAlert(message, time, color) {
         setMessage(message);
-        setColorAlert(color)
+        setColorAlert(color);
         setVisible(true);
         sleep(time).then(() => { setVisible(false); });
     }
@@ -41,7 +44,6 @@ const ManageSick = () => {
         try {
             let response = await getSickService("");
             await setItems(response.data.sick);
-            showAlert("Đã load tất cả bệnh !", 2500, "primary");
         } catch (error) {
             console.log(error);
         }
@@ -59,12 +61,12 @@ const ManageSick = () => {
             } else {
                 handleGetSick();
                 setIsOpenModal(false);
-                showAlert("Thêm mới blog thành công !", 2500, "info");
+                showAlert("Thêm mới bênh thành công !", 2500, "info");
                 emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
             }
         } catch (error) {
             console.log(error);
-            showAlert("Lỗi không thêm được blog!", 2500, "danger");
+            showAlert("Lỗi không thêm được bệnh!", 2500, "danger");
         }
     }
     function readExcel(e) {
@@ -102,6 +104,48 @@ const ManageSick = () => {
         }
         setDataExcel([])
     }
+    async function handleDeleteSick(id) {
+        try {
+            let response = await deleteOneSickService(id);
+            if (response && response.data.errCode !== 0) {
+                showAlert("Xóa bệnh không thành công !", 2500, "primary");
+            } else {
+                setIsOpenModal(false);
+                showAlert("Xóa bệnh thành công !", 2500, "primary");
+                handleGetSick();
+                setVisible(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    function toggleSickEditMoDal() {
+        setIsOpenEditModal(!isOpenEditModal);
+    }
+    function handleEditBlog(item) {
+        setIsOpenEditModal(true);
+        setSickEdit(item);
+    }
+    async function saveEditSick(data) {
+        try {
+            const formData = new FormData();
+            formData.append("id", data.id);
+            formData.append("name", data.name);
+            formData.append("tag", data.tag);
+            formData.append("detail", data.detail);
+            formData.append("image", data.image);
+            let response = await editSickService(formData);
+            console.log(response.data.message);
+            if (response && response.data.errCode !== 0) {
+                alert(response.data.message);
+            } else {
+                await handleGetSick();
+                setIsOpenEditModal(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div>
             <AddSick
@@ -112,14 +156,14 @@ const ManageSick = () => {
             <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
                 {message}
             </Alert>
-            {/* {isOpenEditModal && (
-            <EditBlog
-                isOpen={true}
-                toggleUFromParent={toggleBlogEditMoDal}
-                currentBlog={blogEdit}
-                saveBlog={saveEditBlog}
-            />
-        )} */}
+            {isOpenEditModal && (
+                <EditSick
+                    isOpen={true}
+                    toggleUFromParent={toggleSickEditMoDal}
+                    currentSick={sickEdit}
+                    saveSick={saveEditSick}
+                />
+            )}
             <h1>Quản lý bệnh</h1>
             <div className="inputFile">
                 <button
@@ -149,7 +193,7 @@ const ManageSick = () => {
                 <input
                     placeholder="Tìm kiếm "
                     className="form-control"
-                // onChange={(e) => setSearch(e.target.value)}
+                    onChange={(e) => setSearch(e.target.value)}
                 ></input>
             </div>
             <div className="table-container">
@@ -186,13 +230,13 @@ const ManageSick = () => {
                                         <td>
                                             <div style={{ display: "flex" }}>
                                                 <button
-                                                    // onClick={() => handleEditBlog(d)}
+                                                    onClick={() => handleEditBlog(d)}
                                                     className="buttonx button2"
                                                 >
                                                     Edit
                                                 </button>
                                                 <button
-                                                    // onClick={() => handleDeleteBlog(d.id)}
+                                                    onClick={() => handleDeleteSick(d.id)}
                                                     className="buttonx button3"
                                                 >
                                                     Delete
