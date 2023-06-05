@@ -1,17 +1,15 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { emitter } from "../../utils/emitter";
-import "./Blog.scss"
+import "./Sick.scss"
 // import { connect } from "react-redux";
-class AddBlog extends Component {
+class AddSick extends Component {
     constructor(props) {
         super(props);
         this.state = {
             image: '',
-            title: '',
-            categoryId: '',
+            name: '',
             tag: '',
-            star: '',
             detail: '',
         };
 
@@ -19,10 +17,8 @@ class AddBlog extends Component {
     listenEmitter() {
         emitter.on("EVENT_CLEAR_MODAL", () => {
             this.setState({
-                title: '',
-                categoryId: '',
+                name: '',
                 tag: '',
-                star: '',
                 detail: '',
                 image: '',
             });
@@ -44,19 +40,17 @@ class AddBlog extends Component {
         }
 
     };
-    handleAddNewBlog = () => {
+    handleAddNewSick = () => {
         if (this.checkValidateInput()) {
-            this.props.createNewBlog(this.state);
+            this.props.createNewSick(this.state);
             //   console.log("data modal ", this.state);
         }
     }
     checkValidateInput = () => {
         let isValid = true;
         let arrInput = [
-            "title",
-            "categoryId",
+            "name",
             "tag",
-            "star",
             "detail",
             "image",
         ];
@@ -82,11 +76,10 @@ class AddBlog extends Component {
             <Modal
                 isOpen={this.props.isOpen}
                 toggle={() => this.toggle()}
-                size="lg"
+                size="xl"
                 className={"modal-user"}
                 scrollable={true}
                 centered
-                fullscreen
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
@@ -97,34 +90,17 @@ class AddBlog extends Component {
                         <div className="row">
                             <div className="form-row">
                                 <div className="form-group col-md-24">
-                                    <label>Tên bài viết</label>
+                                    <label>Tên bệnh</label>
                                     <input
                                         type="text"
                                         onChange={(event) => {
-                                            this.handleOnchange(event, "title");
+                                            this.handleOnchange(event, "name");
                                         }}
                                         className="form-control"
-                                        id="title"
-                                        name="title"
-                                        value={this.state.title}
+                                        id="name"
+                                        name="name"
+                                        value={this.state.name}
                                     />
-                                </div>
-                                <div className="form-group col-md-24">
-                                    <label>Phân loại</label>
-                                    <select
-                                        name="categoryId"
-                                        className="form-control"
-                                        onChange={(event) => {
-                                            this.handleOnchange(event, "categoryId");
-                                        }}
-                                        value={this.state.categoryId}
-                                    >
-                                        <option value="">Chọn</option>
-                                        <option value="1">Phong cách sống</option>
-                                        <option value="2">Công thức nấu ăn</option>
-                                        <option value="3">Lưu ý</option>
-                                        <option value="4">Mẹo vặt</option>
-                                    </select>
                                 </div>
                             </div>
                             <div className="form-row">
@@ -142,21 +118,7 @@ class AddBlog extends Component {
                                 </div>
                             </div>
                             <div className="form-group col-md-24">
-                                <label>Star</label>
-                                <input
-                                    type="number"
-                                    onChange={(event) => {
-                                        this.handleOnchange(event, "star");
-                                    }}
-                                    className="form-control"
-                                    min={1}
-                                    max={10}
-                                    name="star"
-                                    value={this.state.star}
-                                />
-                            </div>
-                            <div className="form-group col-md-24">
-                                <label>Nội dung</label>
+                                <label>Mô tả</label>
                                 <textarea
                                     onChange={(event) => {
                                         this.handleOnchange(event, "detail");
@@ -185,7 +147,7 @@ class AddBlog extends Component {
                     <Button
                         color="primary "
                         className="px-3"
-                        onClick={() => this.handleAddNewBlog()}
+                        onClick={() => this.handleAddNewSick()}
                     >
                         Tạo mới
                     </Button>{" "}
@@ -202,4 +164,4 @@ class AddBlog extends Component {
     }
 }
 
-export default AddBlog;
+export default AddSick;

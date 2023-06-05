@@ -133,6 +133,7 @@ class EditBlog extends Component {
                                         <option value="1">Phong cách sống</option>
                                         <option value="2">Công thức nấu ăn</option>
                                         <option value="3">Lưu ý</option>
+                                        <option value="4">Mẹo vặt</option>
                                     </select>
                                 </div>
                             </div>

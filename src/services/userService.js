@@ -48,8 +48,8 @@ const editIngreService = (data) => {
 };
 
 const getBlogService = (inputId) => {
-    return axios.get(
-        `http://localhost:8069/api/user/get-all-blog?id=${inputId}`
+    return axios.post(
+        `http://localhost:8069/api/user/get-all-blog?categoryId=${inputId}`
     );
 };
 const newBlogService = (data) => {
@@ -77,6 +77,19 @@ const newBlogExcelService = (data) => {
         "http://localhost:8069/api/admin/create-excel-blog", data
     );
 };
+
+//SIck
+const getSickService = (inputId) => {
+    return axios.post(
+        `http://localhost:8069/api/user/get-all-sick?categoryId=${inputId}`
+    );
+};
+const newSickService = (data) => {
+    return axios.post(
+        "http://localhost:8069/api/admin/create-new-sick", data
+    );
+};
+
 export {
     deleteIngreService,
     newIngreService,
@@ -93,5 +106,7 @@ export {
     deleteOneBlogService,
     deleteBlogService,
     editBlogService,
-    newBlogExcelService
+    newBlogExcelService,
+    getSickService,
+    newSickService,
 };

@@ -16,6 +16,7 @@ import ModalEditIngredient from "./ModalEditIngredient";
 
 const ManageIngredient = () => {
     const navigate = useNavigate();
+    const [dataExcel, setDataExcel] = useState([]);
     const [items, setItems] = useState([]);
     const [ingreEdit, setIngreEdit] = useState({});
     const [search, setSearch] = useState("");
@@ -138,9 +139,10 @@ const ManageIngredient = () => {
             fileReader.onerror = (error) => {
                 reject(error);
             };
+            e.target.value = null;
         });
         promise.then((d) => {
-            handleAddExcelIngre(d);
+            setDataExcel(d);
         });
     }
     return (
@@ -171,7 +173,7 @@ const ManageIngredient = () => {
                 <h5>Nhập file Excel input dữ liệu :</h5>
                 <input type="file" onChange={(e) => readExcel(e)}></input>
                 <button
-                    onClick={() => handleAddExcelIngre()}
+                    onClick={() => handleAddExcelIngre(dataExcel)}
                     className="button button5"
                 >
                     Ghi dữ liệu vào database

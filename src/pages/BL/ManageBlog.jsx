@@ -11,6 +11,7 @@ import EditBlog from './EditBlog';
 const ManageBlog = () => {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
+    const [dataExcel, setDataExcel] = useState([]);
     const [blogEdit, setBlogEdit] = useState({});
     const [search, setSearch] = useState("");
     const [colorAlert, setColorAlert] = useState("info");
@@ -148,12 +149,13 @@ const ManageBlog = () => {
             };
         });
         promise.then((d) => {
-            handleAddExcelBlog(d);
+            setDataExcel(d)
         });
+        e.target.value = null;
     }
-    async function handleAddExcelBlog(items) {
+    async function handleAddExcelBlog(data) {
         try {
-            let response = await newBlogExcelService(items);
+            let response = await newBlogExcelService(data);
             if (response && response.data.errCode !== 0) {
                 alert(response.message);
             } else {
@@ -162,6 +164,7 @@ const ManageBlog = () => {
         } catch (error) {
             console.log(error);
         }
+        setDataExcel([])
     }
     return (
         <div>
@@ -193,7 +196,7 @@ const ManageBlog = () => {
                 <h5>Nhập file Excel input dữ liệu :</h5>
                 <input type="file" onChange={(e) => readExcel(e)}></input>
                 <button
-                    // onClick={() => handleAddExcelIngre()}
+                    onClick={() => handleAddExcelBlog(dataExcel)}
                     className="button button5"
                 >
                     Ghi dữ liệu vào database
@@ -243,7 +246,7 @@ const ManageBlog = () => {
                                         <td>{d.star}</td>
                                         <td>
                                             <div>
-                                                <img style={{ width: '50px', height: '50px' }} src={`https://storage.googleapis.com/healthfood-do/${d.image}`} />
+                                                <img style={{ width: '50px', height: '50px' }} src={d.image!=null?`https://storage.googleapis.com/healthfood-do/${d.image}`:""} />
                                             </div>
                                         </td>
                                         <td>
