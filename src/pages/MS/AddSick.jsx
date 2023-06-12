@@ -63,14 +63,12 @@ class AddSick extends Component {
         }
         return isValid;
     };
-
     componentDidMount() {
         this.listenEmitter();
     }
     toggle = () => {
         this.props.toggleUFromParent();
     };
-
     render() {
         return (
             <Modal
@@ -126,6 +124,7 @@ class AddSick extends Component {
                                     className="form-control"
                                     name="detail"
                                     value={this.state.detail}
+                                    style={{height:400}}
                                 />
                             </div>
                             <div className="form-group col-md-24">

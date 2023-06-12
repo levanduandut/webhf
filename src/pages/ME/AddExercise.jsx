@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { emitter } from "../../utils/emitter";
-import "./Sick.scss";
-import _ from "lodash";
 // import { connect } from "react-redux";
-class EditSick extends Component {
+class AddExercise extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -18,10 +16,10 @@ class EditSick extends Component {
     listenEmitter() {
         emitter.on("EVENT_CLEAR_MODAL", () => {
             this.setState({
-                image: '',
                 name: '',
                 tag: '',
                 detail: '',
+                image: '',
             });
         });
     }
@@ -39,7 +37,14 @@ class EditSick extends Component {
                 ...copyState,
             });
         }
+
     };
+    handleAddNewSick = () => {
+        if (this.checkValidateInput()) {
+            this.props.createNewSick(this.state);
+            //   console.log("data modal ", this.state);
+        }
+    }
     checkValidateInput = () => {
         let isValid = true;
         let arrInput = [
@@ -58,22 +63,8 @@ class EditSick extends Component {
         return isValid;
     };
     componentDidMount() {
-        let sick = this.props.currentSick;
-        if (sick && !_.isEmpty(sick)) {
-            this.setState({
-                id: sick.id,
-                name: sick.name,
-                tag: sick.tag,
-                detail: sick.detail,
-                image: sick.image,
-            });
-        }
+        this.listenEmitter();
     }
-    handleSaveSick = () => {
-        if (this.checkValidateInput()) {
-            this.props.saveSick(this.state);
-        }
-    };
     toggle = () => {
         this.props.toggleUFromParent();
     };
@@ -82,15 +73,14 @@ class EditSick extends Component {
             <Modal
                 isOpen={this.props.isOpen}
                 toggle={() => this.toggle()}
-                size="lg"
+                size="xl"
                 className={"modal-user"}
                 scrollable={true}
                 centered
-                fullscreen
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
-                    Chỉnh sửa bệnh
+                    Thêm mới bài tập
                 </ModalHeader>
                 <ModalBody>
                     <div className="container">
@@ -125,7 +115,7 @@ class EditSick extends Component {
                                 </div>
                             </div>
                             <div className="form-group col-md-24">
-                                <label>Nội dung</label>
+                                <label>Mô tả</label>
                                 <textarea
                                     onChange={(event) => {
                                         this.handleOnchange(event, "detail");
@@ -155,9 +145,9 @@ class EditSick extends Component {
                     <Button
                         color="primary "
                         className="px-3"
-                        onClick={() => this.handleSaveSick()}
+                        onClick={() => this.handleAddNewSick()}
                     >
-                        Lưu
+                        Tạo mới
                     </Button>{" "}
                     <Button
                         color="danger "
@@ -172,5 +162,4 @@ class EditSick extends Component {
     }
 }
 
-
-export default EditSick;
+export default AddExercise;

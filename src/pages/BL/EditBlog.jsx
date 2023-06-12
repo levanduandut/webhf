@@ -63,7 +63,6 @@ class EditBlog extends Component {
         }
         return isValid;
     };
-
     componentDidMount() {
         let blog = this.props.currentBlog;
         if (blog && !_.isEmpty(blog)) {
@@ -86,7 +85,6 @@ class EditBlog extends Component {
     toggle = () => {
         this.props.toggleUFromParent();
     };
-
     render() {
         return (
             <Modal

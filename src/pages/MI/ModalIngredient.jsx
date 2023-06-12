@@ -88,7 +88,6 @@ class ModalIngredient extends Component {
         }
         return isValid;
     };
-
     componentDidMount() {
         this.listenEmitter();
     }
@@ -96,7 +95,6 @@ class ModalIngredient extends Component {
         this.props.toggleUFromParent();
 
     };
-
     render() {
         return (
             <Modal
@@ -386,13 +384,5 @@ class ModalIngredient extends Component {
         );
     }
 }
-
-// const mapStateToProps = (state) => {
-//     return {};
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {};
-// };
 
 export default ModalIngredient;

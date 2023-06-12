@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
 
 const About = () => {
@@ -7,6 +7,7 @@ const About = () => {
         if (!localStorage.getItem("JWT")) {
             navigate("/login")
         }
+        console.log(process.env);
     })
     async function handleLogOut() {
         await localStorage.clear("JWT");
@@ -17,9 +18,9 @@ const About = () => {
         <div>
             <h1>
                 <div style={{ fontFamily: "", justifyContent: 'center', display: 'flex', flexDirection: "column", padding: "20px 100px" }}>
-                    <button style={{ fontFamily: "'Anton', sans-serif"}} onClick={(event) => {
+                    <button style={{ fontFamily: "'Anton', sans-serif" }} onClick={(event) => {
                         handleLogOut(event);
-                    }}>Đăng xuất</button>
+                    }}>Đăng xuất </button>
                 </div>
             </h1>
         </div>

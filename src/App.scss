@@ -30,27 +30,31 @@ main {
   display: flex;
   margin-left: 5px;
 }
-.link{
-    display: flex;
-    color: aliceblue;
-    padding: 10px 15px;
-    gap: 15px;
-    align-items: center;
-    align-self: center;
-    transition: all 0.5s;
+.link {
+  display: flex;
+  color: aliceblue;
+  padding: 10px 15px;
+  gap: 15px;
+  align-items: center;
+  align-self: center;
+  transition: all 0.5s;
 }
-.link:hover{
-    background: #e1f056;
-    color: black;
+.link:hover {
+  background: #e1f056;
+  color: black;
 }
-.icon , .link_text {
-    font-size: 20px
+.icon,
+.link_text {
+  font-size: 20px;
 }
-.link_text{
-  font-family: 'Lobster', cursive;
+.link_text {
+  font-family: "Lobster", cursive;
 }
-.btn_logOut{
+.btn_logOut {
   border: none;
   padding: 5px;
-  border-radius: 3px
+  border-radius: 3px;
+}
+h5 {
+  font-family: "Lobster", cursive;
 }

@@ -69,14 +69,12 @@ class AddBlog extends Component {
         }
         return isValid;
     };
-
     componentDidMount() {
         this.listenEmitter();
     }
     toggle = () => {
         this.props.toggleUFromParent();
     };
-
     render() {
         return (
             <Modal

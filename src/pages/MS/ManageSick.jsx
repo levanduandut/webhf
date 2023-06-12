@@ -4,7 +4,7 @@ import { emitter } from "../../utils/emitter";
 import AddSick from './AddSick';
 import { Alert } from 'reactstrap';
 import * as XLSX from "xlsx";
-import { deleteOneSickService, editSickService, getSickService, newSickExcelService, newSickService } from '../../services/userService';
+import { deleteOneSickService, deleteSickService, editSickService, getSickService, newSickExcelService, newSickService } from '../../services/userService';
 import EditSick from './EditSick';
 const ManageSick = () => {
     const navigate = useNavigate();
@@ -146,6 +146,19 @@ const ManageSick = () => {
             console.log(error);
         }
     }
+    async function handleDeleteAllSick() {
+        try {
+            let response = await deleteSickService();
+            if (response && response.data.errCode !== 0) {
+                showAlert("Xóa không thành công !", 2500, "danger");
+            } else {
+                handleGetSick();
+                showAlert("Đã xóa tất cả bệnh !", 2500, "danger");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div>
             <AddSick
@@ -182,7 +195,7 @@ const ManageSick = () => {
                     Ghi dữ liệu vào database
                 </button>
                 <button
-                    // onClick={() => handleDeleteAllBlog()}
+                    onClick={() => handleDeleteAllSick()}
                     className="button button6"
                 >
                     Xóa toàn bộ dữ liệu

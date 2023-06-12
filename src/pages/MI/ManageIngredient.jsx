@@ -36,7 +36,6 @@ const ManageIngredient = () => {
             console.log(error);
         }
     }
-
     async function handleDeleteIngre(id) {
         try {
             let response = await deleteOneIngreService(id);

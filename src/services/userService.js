@@ -1,107 +1,119 @@
 import axios from "axios";
+const URL_BE = process.env.REACT_APP_URL_BE;
+
 const handleLoginApi = (useremail, userpassword) => {
-    return axios.post("http://localhost:8069/api/admin/login", {
+    return axios.post(`${URL_BE}/api/admin/login`, {
         email: useremail,
         password: userpassword,
     });
 };
 const getAllUsers = (inputId) => {
     return axios.get(
-        `http://localhost:8069/api/admin/get-all-user?id=${inputId}`
+        `${URL_BE}/api/admin/get-all-user?id=${inputId}`
     );
 };
 const createNewUserService = (data) => {
-    return axios.post(`http://localhost:8069/api/admin/create-new-user`, data);
+    return axios.post(`${URL_BE}/api/admin/create-new-user`, data);
 };
 const deleteUserService = (id) => {
-    return axios.post(`http://localhost:8069/api/admin/delete-user`, { id: id });
+    return axios.post(`${URL_BE}/api/admin/delete-user`, { id: id });
 };
 const editUserService = (data) => {
-    return axios.put("http://localhost:8069/api/admin/edit-user", data);
+    return axios.put(`${URL_BE}/api/admin/edit-user`, data);
 };
+
+//Ingre
 const newIngreService = (data) => {
     return axios.post(
-        "http://localhost:8069/api/admin/create-new-ingredient",
+        `${URL_BE}/api/admin/create-new-ingredient`,
         data
     );
 };
 const deleteIngreService = () => {
     return axios.post(
-        "http://localhost:8069/api/admin/delete-all-ingredient",
+        `${URL_BE}/api/admin/delete-all-ingredient`,
         { Delete: 1 }
     );
 };
 const deleteOneIngreService = (id) => {
     return axios.post(
-        "http://localhost:8069/api/admin/delete-ingredient",
+        `${URL_BE}/api/admin/delete-ingredient`,
         { id: id }
     );
 };
 const getIngreService = (inputId) => {
     return axios.get(
-        `http://localhost:8069/api/user/get-all-ingredient?id=${inputId}`
+        `${URL_BE}/api/user/get-all-ingredient?id=${inputId}`
 
     );
 };
 const editIngreService = (data) => {
-    return axios.put("http://localhost:8069/api/admin/edit-ingredient", data);
+    return axios.put(`${URL_BE}/api/admin/edit-ingredient`, data);
 };
 
+
+//Blog
 const getBlogService = (inputId) => {
     return axios.post(
-        `http://localhost:8069/api/user/get-all-blog?categoryId=${inputId}`
+        `${URL_BE}/api/user/get-all-blog?categoryId=${inputId}`
     );
 };
 const newBlogService = (data) => {
     return axios.post(
-        "http://localhost:8069/api/admin/create-new-blog", data
+        `${URL_BE}/api/admin/create-new-blog`, data
     );
 };
 const deleteOneBlogService = (id) => {
     return axios.post(
-        "http://localhost:8069/api/admin/delete-blog",
+        `${URL_BE}/api/admin/delete-blog`,
         { id: id }
     );
 };
 const deleteBlogService = () => {
     return axios.post(
-        "http://localhost:8069/api/admin/delete-all-blog",
+        `${URL_BE}/api/admin/delete-all-blog`,
         { Delete: 1 }
     );
 };
 const editBlogService = (data) => {
-    return axios.put("http://localhost:8069/api/admin/edit-blog", data);
+    return axios.put(`${URL_BE}/api/admin/edit-blog`, data);
 };
 const newBlogExcelService = (data) => {
     return axios.post(
-        "http://localhost:8069/api/admin/create-excel-blog", data
+        `${URL_BE}/api/admin/create-excel-blog`, data
     );
 };
 
-//SIck
+//Sick
 const getSickService = (inputId) => {
     return axios.post(
-        `http://localhost:8069/api/user/get-all-sick?categoryId=${inputId}`
+        `${URL_BE}/api/user/get-all-sick?categoryId=${inputId}`
     );
 };
 const newSickService = (data) => {
     return axios.post(
-        "http://localhost:8069/api/admin/create-new-sick", data
+        `${URL_BE}/api/admin/create-new-sick`, data
     );
 };
 const newSickExcelService = (data) => {
     return axios.post(
-        "http://localhost:8069/api/admin/create-excel-sick", data
+        `${URL_BE}/api/admin/create-excel-sick`, data
     );
 };
 const deleteOneSickService = (id) => {
     return axios.post(
-        "http://localhost:8069/api/admin/delete-sick",
+        `${URL_BE}/api/admin/delete-sick`,
         { id: id }
     );
 };
 const editSickService = (data) => {
-    return axios.put("http://localhost:8069/api/admin/edit-sick", data);
+    return axios.put(`${URL_BE}/api/admin/edit-sick`, data);
+};
+const deleteSickService = () => {
+    return axios.post(
+        `${URL_BE}/api/admin/delete-all-sick`,
+        { Delete: 1 }
+    );
 };
 
 export {
@@ -126,4 +138,5 @@ export {
     newSickExcelService,
     deleteOneSickService,
     editSickService,
+    deleteSickService
 };
