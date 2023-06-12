@@ -4,15 +4,21 @@ import { useNavigate } from 'react-router-dom';
 import * as XLSX from "xlsx";
 import AddExercise from './AddExercise';
 import "./ManageExercise.scss";
+import AddCategory from './AddCategory';
+import { deleteOneExeCaService, editExeCaService, getExerciseCa, newExerciseCa } from '../../services/userService';
+import EditCategory from './EditCategory';
 
 const ManageExercise = () => {
     const navigate = useNavigate();
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenModalCa, setIsOpenModalCa] = useState(false);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+    const [isOpenEditModalCa, setIsOpenEditModalCa] = useState(false);
     const [visible, setVisible] = useState(false);
     const [message, setMessage] = useState("");
-    const [sickEdit, setSickEdit] = useState({});
+    const [exeCaEdit, setExeCaEdit] = useState({});
     const [items, setItems] = useState([]);
+    const [itemsCa, setItemsCa] = useState([]);
     const [search, setSearch] = useState("");
     const [dataExcel, setDataExcel] = useState([]);
     const [colorAlert, setColorAlert] = useState("info");
@@ -22,7 +28,7 @@ const ManageExercise = () => {
             navigate("/login")
         }
         handleGetSick();
-        showAlert("Đã load tất cả bệnh !", 2500, "primary");
+        showAlert("Đã load tất cả !", 2500, "primary");
     }, [])
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -36,15 +42,38 @@ const ManageExercise = () => {
     function toggleBlogModal() {
         setIsOpenModal(!isOpenModal);
     }
+    function toggleBlogModalCa() {
+        setIsOpenModalCa(!isOpenModalCa);
+    }
     function handleAddNew() {
         setIsOpenModal(true);
     }
+    function handleAddNewCa() {
+        setIsOpenModalCa(true);
+    }
     async function handleGetSick() {
         try {
-            // let response = await getSickService("");
-            // await setItems(response.data.sick);
+            let response = await getExerciseCa("");
+            await setItemsCa(response.data.exerciseCa);
         } catch (error) {
             console.log(error);
+        }
+    }
+    async function createNewExerciseCa(data) {
+        try {
+
+            let response = await newExerciseCa(data);
+            if (response && response.data.errCode !== 0) {
+                setMessage(response.message)
+            } else {
+                handleGetSick();
+                setIsOpenModalCa(false);
+                showAlert("Thêm mới loại bài tập thành công !", 2500, "info");
+                emitter.emit("EVENT_CLEAR_MODAL_Ca", { id: "123" });
+            }
+        } catch (error) {
+            console.log(error);
+            showAlert("Lỗi không thêm được !", 2500, "danger");
         }
     }
     async function createNewSick(data) {
@@ -103,27 +132,31 @@ const ManageExercise = () => {
     //     }
     //     setDataExcel([])
     // }
-    // async function handleDeleteSick(id) {
-    //     try {
-    //         let response = await deleteOneSickService(id);
-    //         if (response && response.data.errCode !== 0) {
-    //             showAlert("Xóa bệnh không thành công !", 2500, "primary");
-    //         } else {
-    //             setIsOpenModal(false);
-    //             showAlert("Xóa bệnh thành công !", 2500, "primary");
-    //             handleGetSick();
-    //             setVisible(true);
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-    function toggleSickEditMoDal() {
-        setIsOpenEditModal(!isOpenEditModal);
+    async function handleDeleteExeCa(id) {
+        try {
+            let response = await deleteOneExeCaService(id);
+            if (response && response.data.errCode !== 0) {
+                showAlert("Xóa loại bài tập không thành công !", 2500, "primary");
+            } else {
+                setIsOpenModal(false);
+                showAlert("Xóa loại bài tập thành công !", 2500, "primary");
+                handleGetSick();
+                setVisible(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
-    function handleEditBlog(item) {
-        setIsOpenEditModal(true);
-        setSickEdit(item);
+    function toggleExeEditMoDalCa() {
+        setIsOpenEditModalCa(!isOpenEditModalCa);
+    }
+    // function handleEditBlog(item) {
+    //     setIsOpenEditModal(true);
+    //     setSickEdit(item);
+    // }
+    function handleEditExeCa(item) {
+        setIsOpenEditModalCa(true);
+        setExeCaEdit(item);
     }
     // async function saveEditSick(data) {
     //     try {
@@ -145,6 +178,19 @@ const ManageExercise = () => {
     //         console.log(error);
     //     }
     // }
+    async function saveExeCa(data) {
+        try {
+            let response = await editExeCaService(data);
+            if (response && response.data.errCode !== 0) {
+                alert(response.data.message);
+            } else {
+                await handleGetSick();
+                setIsOpenEditModalCa(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     // async function handleDeleteAllSick() {
     //     try {
     //         let response = await deleteSickService();
@@ -160,27 +206,32 @@ const ManageExercise = () => {
     // }
     return (
         <div>
-            <AddExercise
+            <AddCategory
+                isOpen={isOpenModalCa}
+                toggleUFromParent={toggleBlogModalCa}
+                createNewExerciseCa={createNewExerciseCa}
+            />
+            {/* <AddExercise
                 isOpen={isOpenModal}
                 toggleUFromParent={toggleBlogModal}
                 createNewSick={createNewSick}
-            />
+            /> */}
             {/* <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
                 {message}
             </Alert> */}
-            {/* {isOpenEditModal && (
-                <EditSick
+            {isOpenEditModalCa && (
+                <EditCategory
                     isOpen={true}
-                    toggleUFromParent={toggleSickEditMoDal}
-                    currentSick={sickEdit}
-                    saveSick={saveEditSick}
+                    toggleUFromParent={toggleExeEditMoDalCa}
+                    currentExeCa={exeCaEdit}
+                    saveExeCa={saveExeCa}
                 />
-            )} */}
+            )}
             <h1>Quản lý bài tập thể dục</h1>
             <div className='row row-cols-2'>
                 <div className='col-4'>
                     <button
-                        onClick={() => handleAddNew()}
+                        onClick={() => handleAddNewCa()}
                         className="button button4"
                     >
                         Thêm loại bài tập
@@ -192,17 +243,32 @@ const ManageExercise = () => {
                                 <tr>
                                     <th scope="col">Id</th>
                                     <th scope="col">Tên loại bài tập</th>
-                                    <th scope="col">Mô tả</th>
+                                    <th scope="col">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {items &&
-                                    items
+                                {
+                                    itemsCa
                                         .map((d) => (
                                             <tr key={d.id}>
                                                 <td>{d.id}</td>
                                                 <td>{d.name}</td>
-                                                <td>{d.detail}</td>
+                                                <td>
+                                                    <div style={{ display: "flex" }}>
+                                                        <button
+                                                            onClick={() => handleEditExeCa(d)}
+                                                            className="buttonx button2"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteExeCa(d.id)}
+                                                            className="buttonx button3"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         ))}
                             </tbody>

@@ -116,6 +116,28 @@ const deleteSickService = () => {
     );
 };
 
+//Exercise
+const newExerciseCa = (data) => {
+    return axios.post(
+        `${URL_BE}/api/admin/create-new-exercise-category`, data
+    );
+};
+const getExerciseCa = (inputId) => {
+    return axios.post(
+        `${URL_BE}/api/user/get-exercise-category?categoryId=${inputId}`
+    );
+};
+const deleteOneExeCaService = (id) => {
+    return axios.post(
+        `${URL_BE}/api/admin/delete-exercise-category`,
+        { id: id }
+    );
+};
+const editExeCaService = (data) => {
+    return axios.put(`${URL_BE}/api/admin/edit-exercise-category`, data);
+};
+
+
 export {
     deleteIngreService,
     newIngreService,
@@ -138,5 +160,9 @@ export {
     newSickExcelService,
     deleteOneSickService,
     editSickService,
-    deleteSickService
+    deleteSickService,
+    newExerciseCa,
+    getExerciseCa,
+    deleteOneExeCaService,
+    editExeCaService
 };
