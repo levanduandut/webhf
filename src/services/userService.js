@@ -167,6 +167,28 @@ const editExeService = (data) => {
     return axios.put(`${URL_BE}/api/admin/edit-exercise`, data);
 };
 
+//Food
+const newFoodCa = (data) => {
+    return axios.post(
+        `${URL_BE}/api/admin/create-new-food-category`, data
+    );
+};
+const getFoodCa = (inputId) => {
+    return axios.post(
+        `${URL_BE}/api/user/get-food-category?categoryId=${inputId}`
+    );
+};
+const deleteFoodCaService = (id) => {
+    return axios.post(
+        `${URL_BE}/api/admin/delete-food-category`,
+        { id: id }
+    );
+};
+const editFoodCaService = (data) => {
+    return axios.put(`${URL_BE}/api/admin/edit-food-category`, data);
+};
+
+
 
 export {
     deleteIngreService,
@@ -200,5 +222,9 @@ export {
     deleteOneExeService,
     newExeExcelService,
     deleteExeService,
-    editExeService
+    editExeService,
+    newFoodCa,
+    getFoodCa,
+    deleteFoodCaService,
+    editFoodCaService
 };

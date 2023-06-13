@@ -2,13 +2,15 @@ import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { emitter } from "../../utils/emitter";
 // import { connect } from "react-redux";
-class AddFood extends Component {
+class AddExercise extends Component {
     constructor(props) {
         super(props);
         this.state = {
             image: '',
             name: '',
-            tag: '',
+            star: '',
+            categoryId: '',
+            time: '',
             detail: '',
         };
 
@@ -16,10 +18,12 @@ class AddFood extends Component {
     listenEmitter() {
         emitter.on("EVENT_CLEAR_MODAL", () => {
             this.setState({
-                name: '',
-                tag: '',
-                detail: '',
                 image: '',
+                name: '',
+                star: '',
+                categoryId: '',
+                time: '',
+                detail: '',
             });
         });
     }
@@ -41,17 +45,19 @@ class AddFood extends Component {
     };
     handleAddNewSick = () => {
         if (this.checkValidateInput()) {
-            this.props.createNewSick(this.state);
+            this.props.createNewExe(this.state);
             //   console.log("data modal ", this.state);
         }
     }
     checkValidateInput = () => {
         let isValid = true;
         let arrInput = [
+            // "image",
             "name",
-            "tag",
+            "star",
+            "categoryId",
+            "time",
             "detail",
-            "image",
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -87,7 +93,7 @@ class AddFood extends Component {
                         <div className="row">
                             <div className="form-row">
                                 <div className="form-group col-md-24">
-                                    <label>Tên bệnh</label>
+                                    <label>Tên bài tập</label>
                                     <input
                                         type="text"
                                         onChange={(event) => {
@@ -101,16 +107,47 @@ class AddFood extends Component {
                                 </div>
                             </div>
                             <div className="form-row">
+                                <label>Loại</label>
+                                <select
+                                    name="categoryId"
+                                    className="form-control"
+                                    onChange={(event) => {
+                                        this.handleOnchange(event, "categoryId");
+                                    }}
+                                    value={this.state.categoryId}
+                                >
+                                    <option value="">Chọn</option>
+                                    {
+                                        this.props.itemsCa.map((x) =>
+                                            <option key={x.id} value={x.id}>{x.name}</option>)
+                                    }
+                                </select>
+                            </div>
+                            <div className="form-row">
                                 <div className="form-group col-md-24">
-                                    <label>Tag</label>
+                                    <label>Star</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
-                                            this.handleOnchange(event, "tag");
+                                            this.handleOnchange(event, "star");
                                         }}
                                         className="form-control"
-                                        name="tag"
-                                        value={this.state.tag}
+                                        name="star"
+                                        value={this.state.star}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group col-md-24">
+                                    <label>Thời gian</label>
+                                    <input
+                                        type="number"
+                                        onChange={(event) => {
+                                            this.handleOnchange(event, "time");
+                                        }}
+                                        className="form-control"
+                                        name="time"
+                                        value={this.state.time}
                                     />
                                 </div>
                             </div>
@@ -123,7 +160,7 @@ class AddFood extends Component {
                                     className="form-control"
                                     name="detail"
                                     value={this.state.detail}
-                                    style={{height:400}}
+                                    style={{ height: 400 }}
                                 />
                             </div>
                             <div className="form-group col-md-24">
@@ -162,4 +199,4 @@ class AddFood extends Component {
     }
 }
 
-export default AddFood;
+export default AddExercise;

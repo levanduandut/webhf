@@ -46,7 +46,7 @@ const ManageExercise = () => {
     function toggleExeModal() {
         setIsOpenModal(!isOpenModal);
     }
-    function toggleBlogModalCa() {
+    function toggleExeCaModal() {
         setIsOpenModalCa(!isOpenModalCa);
     }
     function handleAddNew() {
@@ -140,6 +140,7 @@ const ManageExercise = () => {
             } else {
                 handleGetExe();
             }
+            handleGetExe();
         } catch (error) {
             console.log(error);
         }
@@ -240,7 +241,7 @@ const ManageExercise = () => {
         <div>
             <AddCategory
                 isOpen={isOpenModalCa}
-                toggleUFromParent={toggleBlogModalCa}
+                toggleUFromParent={toggleExeCaModal}
                 createNewExerciseCa={createNewExerciseCa}
             />
             <AddExercise

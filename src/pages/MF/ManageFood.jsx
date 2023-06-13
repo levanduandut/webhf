@@ -4,15 +4,23 @@ import { useNavigate } from 'react-router-dom';
 import * as XLSX from "xlsx";
 import AddFood from './AddFood';
 import "./ManageFood.scss";
+import { deleteFoodCaService, editFoodCaService, getFoodCa, getSickService, newFoodCa } from '../../services/userService';
+import AddCategory from './AddCategory';
+import EditCategory from './EditCategory';
 
 const ManageFood = () => {
     const navigate = useNavigate();
     const [isOpenModal, setIsOpenModal] = useState(false);
+    const [isOpenModalCa, setIsOpenModalCa] = useState(false);
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
+    const [isOpenEditModalCa, setIsOpenEditModalCa] = useState(false);
     const [visible, setVisible] = useState(false);
     const [message, setMessage] = useState("");
+    const [foodCaEdit, setFoodCaEdit] = useState({});
     const [sickEdit, setSickEdit] = useState({});
     const [items, setItems] = useState([]);
+    const [itemsCa, setItemsCa] = useState([]);
+    const [itemSick, setItemSick] = useState([]);
     const [search, setSearch] = useState("");
     const [dataExcel, setDataExcel] = useState([]);
     const [colorAlert, setColorAlert] = useState("info");
@@ -22,10 +30,19 @@ const ManageFood = () => {
             navigate("/login")
         }
         handleGetSick();
+        handleGetFoodCa();
         showAlert("Đã load tất cả bệnh !", 2500, "primary");
     }, [])
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    async function handleGetSick() {
+        try {
+            let response = await getSickService("");
+            await setItemSick(response.data.sick);
+        } catch (error) {
+            console.log(error);
+        }
     }
     function showAlert(message, time, color) {
         setMessage(message);
@@ -33,20 +50,26 @@ const ManageFood = () => {
         setVisible(true);
         sleep(time).then(() => { setVisible(false); });
     }
-    function toggleBlogModal() {
-        setIsOpenModal(!isOpenModal);
-    }
+    // function toggleBlogModal() {
+    //     setIsOpenModal(!isOpenModal);
+    // }
     function handleAddNew() {
         setIsOpenModal(true);
     }
-    async function handleGetSick() {
-        try {
-            // let response = await getSickService("");
-            // await setItems(response.data.sick);
-        } catch (error) {
-            console.log(error);
-        }
+    function toggleFoodCaModal() {
+        setIsOpenModalCa(!isOpenModalCa);
     }
+    function handleAddNewCa() {
+        setIsOpenModalCa(true);
+    }
+    // async function handleGetSick() {
+    //     try {
+    //         // let response = await getSickService("");
+    //         // await setItems(response.data.sick);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
     async function createNewSick(data) {
         try {
             const formData = new FormData();
@@ -103,7 +126,7 @@ const ManageFood = () => {
     //     }
     //     setDataExcel([])
     // }
-    // async function handleDeleteSick(id) {
+    // async function handleDeleteFoodCa(id) {
     //     try {
     //         let response = await deleteOneSickService(id);
     //         if (response && response.data.errCode !== 0) {
@@ -118,12 +141,31 @@ const ManageFood = () => {
     //         console.log(error);
     //     }
     // }
-    function toggleSickEditMoDal() {
-        setIsOpenEditModal(!isOpenEditModal);
+    async function handleDeleteFoodCa(id) {
+        try {
+            let response = await deleteFoodCaService(id);
+            if (response && response.data.errCode !== 0) {
+                showAlert("Xóa loại bài tập không thành công !", 2500, "primary");
+            } else {
+                setIsOpenModal(false);
+                showAlert("Xóa loại bài tập thành công !", 2500, "primary");
+                handleGetFoodCa();
+                setVisible(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
-    function handleEditBlog(item) {
-        setIsOpenEditModal(true);
-        setSickEdit(item);
+    // function toggleSickEditMoDal() {
+    //     setIsOpenEditModal(!isOpenEditModal);
+    // }
+    function toggleFoodCaEditMoDal() {
+        setIsOpenEditModalCa(!isOpenEditModalCa);
+    }
+
+    function handleEditExeCa(item) {
+        setIsOpenEditModalCa(true);
+        setFoodCaEdit(item);
     }
     // async function saveEditSick(data) {
     //     try {
@@ -158,12 +200,49 @@ const ManageFood = () => {
     //         console.log(error);
     //     }
     // }
+    async function handleGetFoodCa() {
+        try {
+            let response = await getFoodCa("");
+            await setItemsCa(response.data.foodCa);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async function createNewFoodCa(data) {
+        try {
+            let response = await newFoodCa(data);
+            if (response && response.data.errCode !== 0) {
+                setMessage(response.message)
+            } else {
+                handleGetFoodCa();
+                setIsOpenModalCa(false);
+                showAlert("Thêm mới loại bài tập thành công !", 2500, "info");
+                emitter.emit("EVENT_CLEAR_MODAL_Ca", { id: "123" });
+            }
+        } catch (error) {
+            console.log(error);
+            showAlert("Lỗi không thêm được !", 2500, "danger");
+        }
+    }
+    async function saveFoodCa(data) {
+        try {
+            let response = await editFoodCaService(data);
+            if (response && response.data.errCode !== 0) {
+                alert(response.data.message);
+            } else {
+                await handleGetFoodCa();
+                setIsOpenEditModalCa(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div>
-            <AddFood
-                isOpen={isOpenModal}
-                toggleUFromParent={toggleBlogModal}
-                createNewSick={createNewSick}
+            <AddCategory
+                isOpen={isOpenModalCa}
+                toggleUFromParent={toggleFoodCaModal}
+                createNewFoodCa={createNewFoodCa}
             />
             {/* <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
                 {message}
@@ -171,18 +250,26 @@ const ManageFood = () => {
             {/* {isOpenEditModal && (
                 <EditSick
                     isOpen={true}
-                    toggleUFromParent={toggleSickEditMoDal}
+                    toggleUFromParent={toggleFoodCaEditMoDal}
                     currentSick={sickEdit}
                     saveSick={saveEditSick}
                 />
             )} */}
+            {isOpenEditModalCa && (
+                <EditCategory
+                    isOpen={true}
+                    toggleUFromParent={toggleFoodCaEditMoDal}
+                    currentFoodCa={foodCaEdit}
+                    saveFoodCa={saveFoodCa}
+                />
+            )}
             <h1>Quản lý món ăn</h1>
 
 
-            <div className='row row-cols-2'>
-                <div className='col-4'>
+            <div className='row row-cols-3'>
+                <div className='col-3'>
                     <button
-                        onClick={() => handleAddNew()}
+                        onClick={() => handleAddNewCa()}
                         className="button button4"
                     >
                         Thêm loại món ăn
@@ -194,24 +281,39 @@ const ManageFood = () => {
                                 <tr>
                                     <th scope="col">Id</th>
                                     <th scope="col">Tên loại món ăn</th>
-                                    <th scope="col">Mô tả</th>
+                                    <th scope="col">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {items &&
-                                    items
+                                {itemsCa &&
+                                    itemsCa
                                         .map((d) => (
                                             <tr key={d.id}>
                                                 <td>{d.id}</td>
                                                 <td>{d.name}</td>
-                                                <td>{d.detail}</td>
+                                                <td>
+                                                    <div style={{ display: "flex" }}>
+                                                        <button
+                                                            onClick={() => handleEditExeCa(d)}
+                                                            className="buttonx button2"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteFoodCa(d.id)}
+                                                            className="buttonx button3"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         ))}
                             </tbody>
                         </table>
                     </div>
                 </div>
-                <div className='col-8'>
+                <div className='col-6'>
                     <div className="inputFile">
                         <button
                             onClick={() => handleAddNew()}
@@ -244,13 +346,13 @@ const ManageFood = () => {
                         ></input>
                     </div>
                     <div className="table-container">
-
                         <table className="table container">
                             <thead>
                                 <tr>
                                     <th scope="col">Id</th>
                                     <th scope="col">Tên món ăn</th>
-                                    <th scope="col">Phân Loại</th>
+                                    <th scope="col">Id Sick</th>
+                                    <th scope="col">Id Food Category</th>
                                     <th scope="col">Tag</th>
                                     <th scope="col">Calo</th>
                                     <th scope="col">Thời gian</th>
@@ -286,7 +388,7 @@ const ManageFood = () => {
                                                             Edit
                                                         </button>
                                                         <button
-                                                            // onClick={() => handleDeleteSick(d.id)}
+                                                            // onClick={() => handleDeleteFoodCa(d.id)}
                                                             className="buttonx button3"
                                                         >
                                                             Delete
@@ -298,6 +400,32 @@ const ManageFood = () => {
                             </tbody>
                         </table>
                     </div>
+                </div>
+                <div className='col-3'>
+                    <h5>Danh sách bệnh theo Id</h5>
+                    <div className="table-container">
+                        <table className="table container">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Tên bệnh</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {itemSick &&
+                                    itemSick
+                                        .map((d) => (
+                                            <tr key={d.id}>
+                                                <td>{d.id}</td>
+                                                <td>{d.name}</td>
+                                            </tr>
+                                        ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4>Lưu ý:</h4>
+                    <p>- Nếu idSick món ăn = Id Bệnh : Nên Ăn</p>
+                    <p>- Nếu idSick món ăn = - Id Bệnh : Không Nên Ăn</p>
                 </div>
             </div>
         </div>
