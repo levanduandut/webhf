@@ -136,6 +136,36 @@ const deleteOneExeCaService = (id) => {
 const editExeCaService = (data) => {
     return axios.put(`${URL_BE}/api/admin/edit-exercise-category`, data);
 };
+const newExeService = (data) => {
+    return axios.post(
+        `${URL_BE}/api/admin/create-new-exercise`, data
+    );
+};
+const getExercise = (inputId) => {
+    return axios.post(
+        `${URL_BE}/api/user/get-exercise?categoryId=${inputId}`
+    );
+};
+const deleteOneExeService = (id) => {
+    return axios.post(
+        `${URL_BE}/api/admin/delete-exercise`,
+        { id: id }
+    );
+};
+const newExeExcelService = (data) => {
+    return axios.post(
+        `${URL_BE}/api/admin/create-excel-exercise`, data
+    );
+};
+const deleteExeService = () => {
+    return axios.post(
+        `${URL_BE}/api/admin/delete-all-exercise`,
+        { Delete: 1 }
+    );
+};
+const editExeService = (data) => {
+    return axios.put(`${URL_BE}/api/admin/edit-exercise`, data);
+};
 
 
 export {
@@ -164,5 +194,11 @@ export {
     newExerciseCa,
     getExerciseCa,
     deleteOneExeCaService,
-    editExeCaService
+    editExeCaService,
+    newExeService,
+    getExercise,
+    deleteOneExeService,
+    newExeExcelService,
+    deleteExeService,
+    editExeService
 };

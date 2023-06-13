@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { emitter } from "../../utils/emitter";
 import { useNavigate } from 'react-router-dom';
+import { Alert } from 'reactstrap';
 import * as XLSX from "xlsx";
 import AddExercise from './AddExercise';
 import "./ManageExercise.scss";
 import AddCategory from './AddCategory';
-import { deleteOneExeCaService, editExeCaService, getExerciseCa, newExerciseCa } from '../../services/userService';
+import { deleteExeService, deleteOneExeCaService, deleteOneExeService, editExeCaService, editExeService, getExercise, getExerciseCa, newExeExcelService, newExeService, newExerciseCa } from '../../services/userService';
 import EditCategory from './EditCategory';
+import EditExercise from './EditExercise';
 
 const ManageExercise = () => {
     const navigate = useNavigate();
@@ -17,6 +19,7 @@ const ManageExercise = () => {
     const [visible, setVisible] = useState(false);
     const [message, setMessage] = useState("");
     const [exeCaEdit, setExeCaEdit] = useState({});
+    const [exeEdit, setExeEdit] = useState({});
     const [items, setItems] = useState([]);
     const [itemsCa, setItemsCa] = useState([]);
     const [search, setSearch] = useState("");
@@ -27,7 +30,8 @@ const ManageExercise = () => {
         if (!localStorage.getItem("JWT")) {
             navigate("/login")
         }
-        handleGetSick();
+        handleGetExeCa();
+        handleGetExe();
         showAlert("Đã load tất cả !", 2500, "primary");
     }, [])
     function sleep(ms) {
@@ -39,7 +43,7 @@ const ManageExercise = () => {
         setVisible(true);
         sleep(time).then(() => { setVisible(false); });
     }
-    function toggleBlogModal() {
+    function toggleExeModal() {
         setIsOpenModal(!isOpenModal);
     }
     function toggleBlogModalCa() {
@@ -51,7 +55,7 @@ const ManageExercise = () => {
     function handleAddNewCa() {
         setIsOpenModalCa(true);
     }
-    async function handleGetSick() {
+    async function handleGetExeCa() {
         try {
             let response = await getExerciseCa("");
             await setItemsCa(response.data.exerciseCa);
@@ -59,14 +63,21 @@ const ManageExercise = () => {
             console.log(error);
         }
     }
+    async function handleGetExe() {
+        try {
+            let response = await getExercise("");
+            await setItems(response.data.exercise);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     async function createNewExerciseCa(data) {
         try {
-
             let response = await newExerciseCa(data);
             if (response && response.data.errCode !== 0) {
                 setMessage(response.message)
             } else {
-                handleGetSick();
+                handleGetExeCa();
                 setIsOpenModalCa(false);
                 showAlert("Thêm mới loại bài tập thành công !", 2500, "info");
                 emitter.emit("EVENT_CLEAR_MODAL_Ca", { id: "123" });
@@ -76,22 +87,24 @@ const ManageExercise = () => {
             showAlert("Lỗi không thêm được !", 2500, "danger");
         }
     }
-    async function createNewSick(data) {
+    async function createNewExe(data) {
         try {
             const formData = new FormData();
             formData.append("name", data.name);
-            formData.append("tag", data.tag);
+            formData.append("categoryId", data.categoryId);
             formData.append("detail", data.detail);
+            formData.append("time", data.time);
+            formData.append("star", data.star);
             formData.append("image", data.image);
-            // let response = await newSickService(formData);
-            // if (response && response.data.errCode !== 0) {
-            //     setMessage(response.message)
-            // } else {
-            //     handleGetSick();
-            //     setIsOpenModal(false);
-            //     showAlert("Thêm mới bênh thành công !", 2500, "info");
-            //     emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
-            // }
+            let response = await newExeService(formData);
+            if (response && response.data.errCode !== 0) {
+                setMessage(response.message)
+            } else {
+                handleGetExe();
+                setIsOpenModal(false);
+                showAlert("Thêm mới bênh thành công !", 2500, "info");
+                emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
+            }
         } catch (error) {
             console.log(error);
             showAlert("Lỗi không thêm được bệnh!", 2500, "danger");
@@ -119,19 +132,19 @@ const ManageExercise = () => {
         });
         e.target.value = null;
     }
-    // async function handleAddExcelSick(data) {
-    //     try {
-    //         let response = await newSickExcelService(data);
-    //         if (response && response.data.errCode !== 0) {
-    //             alert(response.message);
-    //         } else {
-    //             handleGetSick();
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     setDataExcel([])
-    // }
+    async function handleAddExcelExe(data) {
+        try {
+            let response = await newExeExcelService(data);
+            if (response && response.data.errCode !== 0) {
+                alert(response.message);
+            } else {
+                handleGetExe();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+        setDataExcel([])
+    }
     async function handleDeleteExeCa(id) {
         try {
             let response = await deleteOneExeCaService(id);
@@ -140,7 +153,22 @@ const ManageExercise = () => {
             } else {
                 setIsOpenModal(false);
                 showAlert("Xóa loại bài tập thành công !", 2500, "primary");
-                handleGetSick();
+                handleGetExeCa();
+                setVisible(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async function handleDeleteExe(id) {
+        try {
+            let response = await deleteOneExeService(id);
+            if (response && response.data.errCode !== 0) {
+                showAlert("Xóa bài tập không thành công !", 2500, "primary");
+            } else {
+                setIsOpenModal(false);
+                showAlert("Xóa bài tập thành công !", 2500, "primary");
+                handleGetExe();
                 setVisible(true);
             }
         } catch (error) {
@@ -150,60 +178,64 @@ const ManageExercise = () => {
     function toggleExeEditMoDalCa() {
         setIsOpenEditModalCa(!isOpenEditModalCa);
     }
-    // function handleEditBlog(item) {
-    //     setIsOpenEditModal(true);
-    //     setSickEdit(item);
-    // }
+    function toggleExeEditMoDal() {
+        setIsOpenEditModal(!isOpenEditModal);
+    }
+    function handleEditExe(item) {
+        setIsOpenEditModal(true);
+        setExeEdit(item);
+    }
     function handleEditExeCa(item) {
         setIsOpenEditModalCa(true);
         setExeCaEdit(item);
     }
-    // async function saveEditSick(data) {
-    //     try {
-    //         const formData = new FormData();
-    //         formData.append("id", data.id);
-    //         formData.append("name", data.name);
-    //         formData.append("tag", data.tag);
-    //         formData.append("detail", data.detail);
-    //         formData.append("image", data.image);
-    //         let response = await editSickService(formData);
-    //         console.log(response.data.message);
-    //         if (response && response.data.errCode !== 0) {
-    //             alert(response.data.message);
-    //         } else {
-    //             await handleGetSick();
-    //             setIsOpenEditModal(false);
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    async function saveEditExe(data) {
+        try {
+            const formData = new FormData();
+            formData.append("id", data.id);
+            formData.append("name", data.name);
+            formData.append("categoryId", data.categoryId);
+            formData.append("detail", data.detail);
+            formData.append("time", data.time);
+            formData.append("star", data.star);
+            formData.append("image", data.image);
+            let response = await editExeService(formData);
+            if (response && response.data.errCode !== 0) {
+                alert(response.data.message);
+            } else {
+                await handleGetExe();
+                setIsOpenEditModal(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     async function saveExeCa(data) {
         try {
             let response = await editExeCaService(data);
             if (response && response.data.errCode !== 0) {
                 alert(response.data.message);
             } else {
-                await handleGetSick();
+                await handleGetExeCa();
                 setIsOpenEditModalCa(false);
             }
         } catch (error) {
             console.log(error);
         }
     }
-    // async function handleDeleteAllSick() {
-    //     try {
-    //         let response = await deleteSickService();
-    //         if (response && response.data.errCode !== 0) {
-    //             showAlert("Xóa không thành công !", 2500, "danger");
-    //         } else {
-    //             handleGetSick();
-    //             showAlert("Đã xóa tất cả bệnh !", 2500, "danger");
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    async function handleDeleteAllExe() {
+        try {
+            let response = await deleteExeService();
+            if (response && response.data.errCode !== 0) {
+                showAlert("Xóa không thành công !", 2500, "danger");
+            } else {
+                handleGetExe();
+                showAlert("Đã xóa tất cả bài tập !", 2500, "danger");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div>
             <AddCategory
@@ -211,20 +243,30 @@ const ManageExercise = () => {
                 toggleUFromParent={toggleBlogModalCa}
                 createNewExerciseCa={createNewExerciseCa}
             />
-            {/* <AddExercise
+            <AddExercise
                 isOpen={isOpenModal}
-                toggleUFromParent={toggleBlogModal}
-                createNewSick={createNewSick}
-            /> */}
-            {/* <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
+                toggleUFromParent={toggleExeModal}
+                createNewExe={createNewExe}
+                itemsCa={itemsCa}
+            />
+            <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
                 {message}
-            </Alert> */}
+            </Alert>
             {isOpenEditModalCa && (
                 <EditCategory
                     isOpen={true}
                     toggleUFromParent={toggleExeEditMoDalCa}
                     currentExeCa={exeCaEdit}
                     saveExeCa={saveExeCa}
+                />
+            )}
+            {isOpenEditModal && (
+                <EditExercise
+                    isOpen={true}
+                    toggleUFromParent={toggleExeEditMoDal}
+                    currentExe={exeEdit}
+                    saveExe={saveEditExe}
+                    itemsCa={itemsCa}
                 />
             )}
             <h1>Quản lý bài tập thể dục</h1>
@@ -287,13 +329,13 @@ const ManageExercise = () => {
                         <h5>Nhập file Excel input dữ liệu :</h5>
                         <input type="file" onChange={(e) => readExcel(e)}></input>
                         <button
-                            // onClick={() => handleAddExcelSick(dataExcel)}
+                            onClick={() => handleAddExcelExe(dataExcel)}
                             className="button button5"
                         >
                             Ghi dữ liệu vào database
                         </button>
                         <button
-                            // onClick={() => handleDeleteAllSick()}
+                            onClick={() => handleDeleteAllExe()}
                             className="button button6"
                         >
                             Xóa toàn bộ dữ liệu
@@ -308,13 +350,12 @@ const ManageExercise = () => {
                         ></input>
                     </div>
                     <div className="table-container">
-
                         <table className="table container">
                             <thead>
                                 <tr>
                                     <th scope="col">Id</th>
                                     <th scope="col">Tên bài tập</th>
-                                    <th scope="col">Phân Loại</th>
+                                    <th scope="col">Phân Loại (id) </th>
                                     <th scope="col">Thời gian</th>
                                     <th scope="col">Image</th>
                                     <th scope="col">Hành động</th>
@@ -331,6 +372,7 @@ const ManageExercise = () => {
                                         .map((d) => (
                                             <tr key={d.id}>
                                                 <td>{d.id}</td>
+                                                <td>{d.name}</td>
                                                 <td>{d.categoryId}</td>
                                                 <td>{d.time}</td>
                                                 <td>
@@ -341,13 +383,13 @@ const ManageExercise = () => {
                                                 <td>
                                                     <div style={{ display: "flex" }}>
                                                         <button
-                                                            // onClick={() => handleEditBlog(d)}
+                                                            onClick={() => handleEditExe(d)}
                                                             className="buttonx button2"
                                                         >
                                                             Edit
                                                         </button>
                                                         <button
-                                                            // onClick={() => handleDeleteSick(d.id)}
+                                                            onClick={() => handleDeleteExe(d.id)}
                                                             className="buttonx button3"
                                                         >
                                                             Delete

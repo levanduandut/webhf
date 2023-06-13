@@ -67,11 +67,10 @@ class EditCategory extends Component {
             <Modal
                 isOpen={this.props.isOpen}
                 toggle={() => this.toggle()}
-                size="lg"
+                size="xl"
                 className={"modal-user"}
                 scrollable={true}
                 centered
-                fullscreen
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}

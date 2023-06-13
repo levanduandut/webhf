@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { emitter } from "../../utils/emitter";
+import _ from "lodash";
 // import { connect } from "react-redux";
-class AddExercise extends Component {
+class EditExercise extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -43,12 +44,12 @@ class AddExercise extends Component {
         }
 
     };
-    handleAddNewSick = () => {
+    
+    handleSaveExe = () => {
         if (this.checkValidateInput()) {
-            this.props.createNewExe(this.state);
-            //   console.log("data modal ", this.state);
+            this.props.saveExe(this.state);
         }
-    }
+    };
     checkValidateInput = () => {
         let isValid = true;
         let arrInput = [
@@ -69,7 +70,18 @@ class AddExercise extends Component {
         return isValid;
     };
     componentDidMount() {
-        this.listenEmitter();
+        let exe = this.props.currentExe;
+        if (exe && !_.isEmpty(exe)) {
+            this.setState({
+                image: exe.image,
+                name: exe.name,
+                star: exe.star,
+                categoryId: exe.categoryId,
+                time: exe.time,
+                detail: exe.detail,
+                id: exe.id,
+            });
+        }
     }
     toggle = () => {
         this.props.toggleUFromParent();
@@ -182,9 +194,9 @@ class AddExercise extends Component {
                     <Button
                         color="primary "
                         className="px-3"
-                        onClick={() => this.handleAddNewSick()}
+                        onClick={() => this.handleSaveExe()}
                     >
-                        Tạo mới
+                        Lưu
                     </Button>{" "}
                     <Button
                         color="danger "
@@ -199,4 +211,4 @@ class AddExercise extends Component {
     }
 }
 
-export default AddExercise;
+export default EditExercise;
