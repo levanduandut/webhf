@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as XLSX from "xlsx";
 import AddFood from './AddFood';
 import "./ManageFood.scss";
-import { deleteFoodCaService, editFoodCaService, getFoodCa, getSickService, newFoodCa } from '../../services/userService';
+import { deleteFoodCaService, editFoodCaService, getFoodCa, getSickService, newFoodCa, newFoodService } from '../../services/userService';
 import AddCategory from './AddCategory';
 import EditCategory from './EditCategory';
 
@@ -237,12 +237,48 @@ const ManageFood = () => {
             console.log(error);
         }
     }
+    async function createNewFood(data) {
+        try {
+            const formData = new FormData();
+            formData.append("name", data.name);
+            formData.append("calo", data.calo);
+            formData.append("tag", data.tag);
+            formData.append("sickId", (Number(data.sickId) * Number(data.status)));
+            formData.append("categoryId", data.categoryId);
+            formData.append("detail", data.detail);
+            formData.append("time", data.time);
+            formData.append("star", data.star);
+            formData.append("image", data.image);
+            let response = await newFoodService(formData);
+            if (response && response.data.errCode !== 0) {
+                setMessage(response.message)
+            } else {
+                // handleGetExe();
+                setIsOpenModal(false);
+                showAlert("Thêm mới món ăn thành công !", 2500, "info");
+                emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
+            }
+        } catch (error) {
+            console.log(error);
+            showAlert("Lỗi không thêm được món ăn!", 2500, "danger");
+        }
+    }
+    function toggleFoodModal() {
+        setIsOpenModal(!isOpenModal);
+    }
     return (
         <div>
             <AddCategory
                 isOpen={isOpenModalCa}
                 toggleUFromParent={toggleFoodCaModal}
                 createNewFoodCa={createNewFoodCa}
+            />
+            <AddFood
+                isOpen={isOpenModal}
+                toggleUFromParent={toggleFoodModal}
+                createNewFood={createNewFood}
+                itemsCa={itemsCa}
+                itemSick={itemSick}
             />
             {/* <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
                 {message}

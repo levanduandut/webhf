@@ -187,6 +187,11 @@ const deleteFoodCaService = (id) => {
 const editFoodCaService = (data) => {
     return axios.put(`${URL_BE}/api/admin/edit-food-category`, data);
 };
+const newFoodService = (data) => {
+    return axios.post(
+        `${URL_BE}/api/admin/create-new-food`, data
+    );
+};
 
 
 
@@ -226,5 +231,6 @@ export {
     newFoodCa,
     getFoodCa,
     deleteFoodCaService,
-    editFoodCaService
+    editFoodCaService,
+    newFoodService
 };
