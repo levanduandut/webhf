@@ -3,10 +3,12 @@ import { emitter } from "../../utils/emitter";
 import { useNavigate } from 'react-router-dom';
 import * as XLSX from "xlsx";
 import AddFood from './AddFood';
+import { Alert } from 'reactstrap';
 import "./ManageFood.scss";
-import { deleteFoodCaService, editFoodCaService, getFoodCa, getSickService, newFoodCa, newFoodService } from '../../services/userService';
+import { deleteFoodCaService, deleteOneFoodService, editFoodCaService, editFoodService, getFood, getFoodCa, getSickService, newFoodCa, newFoodService } from '../../services/userService';
 import AddCategory from './AddCategory';
 import EditCategory from './EditCategory';
+import EditFood from './EditFood';
 
 const ManageFood = () => {
     const navigate = useNavigate();
@@ -17,7 +19,7 @@ const ManageFood = () => {
     const [visible, setVisible] = useState(false);
     const [message, setMessage] = useState("");
     const [foodCaEdit, setFoodCaEdit] = useState({});
-    const [sickEdit, setSickEdit] = useState({});
+    const [foodEdit, setFoodEdit] = useState({});
     const [items, setItems] = useState([]);
     const [itemsCa, setItemsCa] = useState([]);
     const [itemSick, setItemSick] = useState([]);
@@ -31,7 +33,8 @@ const ManageFood = () => {
         }
         handleGetSick();
         handleGetFoodCa();
-        showAlert("Đã load tất cả bệnh !", 2500, "primary");
+        handleGetFood();
+        showAlert("Đã load thành công dữ liệu !", 2500, "primary");
     }, [])
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -50,9 +53,6 @@ const ManageFood = () => {
         setVisible(true);
         sleep(time).then(() => { setVisible(false); });
     }
-    // function toggleBlogModal() {
-    //     setIsOpenModal(!isOpenModal);
-    // }
     function handleAddNew() {
         setIsOpenModal(true);
     }
@@ -62,33 +62,12 @@ const ManageFood = () => {
     function handleAddNewCa() {
         setIsOpenModalCa(true);
     }
-    // async function handleGetSick() {
-    //     try {
-    //         // let response = await getSickService("");
-    //         // await setItems(response.data.sick);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
-    async function createNewSick(data) {
+    async function handleGetFood() {
         try {
-            const formData = new FormData();
-            formData.append("name", data.name);
-            formData.append("tag", data.tag);
-            formData.append("detail", data.detail);
-            formData.append("image", data.image);
-            // let response = await newSickService(formData);
-            // if (response && response.data.errCode !== 0) {
-            //     setMessage(response.message)
-            // } else {
-            //     handleGetSick();
-            //     setIsOpenModal(false);
-            //     showAlert("Thêm mới bênh thành công !", 2500, "info");
-            //     emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
-            // }
+            let response = await getFood("");
+            await setItems(response.data.food);
         } catch (error) {
             console.log(error);
-            showAlert("Lỗi không thêm được bệnh!", 2500, "danger");
         }
     }
     function readExcel(e) {
@@ -145,10 +124,10 @@ const ManageFood = () => {
         try {
             let response = await deleteFoodCaService(id);
             if (response && response.data.errCode !== 0) {
-                showAlert("Xóa loại bài tập không thành công !", 2500, "primary");
+                showAlert("Xóa loại món ăn không thành công !", 2500, "primary");
             } else {
                 setIsOpenModal(false);
-                showAlert("Xóa loại bài tập thành công !", 2500, "primary");
+                showAlert("Xóa loại món ăn thành công !", 2500, "primary");
                 handleGetFoodCa();
                 setVisible(true);
             }
@@ -156,9 +135,24 @@ const ManageFood = () => {
             console.log(error);
         }
     }
-    // function toggleSickEditMoDal() {
-    //     setIsOpenEditModal(!isOpenEditModal);
-    // }
+    async function handleDeleteFood(id) {
+        try {
+            let response = await deleteOneFoodService(id);
+            if (response && response.data.errCode !== 0) {
+                showAlert("Xóa món ăn không thành công !", 2500, "primary");
+            } else {
+                setIsOpenModal(false);
+                showAlert("Xóa món ăn thành công !", 2500, "primary");
+                handleGetFood();
+                setVisible(true);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    function toggleFoodEditMoDal() {
+        setIsOpenEditModal(!isOpenEditModal);
+    }
     function toggleFoodCaEditMoDal() {
         setIsOpenEditModalCa(!isOpenEditModalCa);
     }
@@ -167,26 +161,36 @@ const ManageFood = () => {
         setIsOpenEditModalCa(true);
         setFoodCaEdit(item);
     }
-    // async function saveEditSick(data) {
-    //     try {
-    //         const formData = new FormData();
-    //         formData.append("id", data.id);
-    //         formData.append("name", data.name);
-    //         formData.append("tag", data.tag);
-    //         formData.append("detail", data.detail);
-    //         formData.append("image", data.image);
-    //         let response = await editSickService(formData);
-    //         console.log(response.data.message);
-    //         if (response && response.data.errCode !== 0) {
-    //             alert(response.data.message);
-    //         } else {
-    //             await handleGetSick();
-    //             setIsOpenEditModal(false);
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    function handleEditFood(item) {
+        setIsOpenEditModal(true);
+        setFoodEdit(item);
+    }
+    async function saveEditFood(data) {
+        try {
+            const formData = new FormData();
+            formData.append("name", data.name);
+            formData.append("calo", data.calo);
+            formData.append("tag", data.tag);
+            formData.append("sickId", (Number(data.sickId) * Number(data.status)));
+            formData.append("sickId1", (Number(data.sickId1) * Number(data.status1)));
+            formData.append("sickId2", (Number(data.sickId2) * Number(data.status2)));
+            formData.append("categoryId", data.categoryId);
+            formData.append("detail", data.detail);
+            formData.append("time", data.time);
+            formData.append("star", data.star);
+            formData.append("image", data.image);
+            let response = await editFoodService(formData);
+            console.log(response.data.message);
+            if (response && response.data.errCode !== 0) {
+                alert(response.data.message);
+            } else {
+                await handleGetSick();
+                setIsOpenEditModal(false);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     // async function handleDeleteAllSick() {
     //     try {
     //         let response = await deleteSickService();
@@ -244,6 +248,8 @@ const ManageFood = () => {
             formData.append("calo", data.calo);
             formData.append("tag", data.tag);
             formData.append("sickId", (Number(data.sickId) * Number(data.status)));
+            formData.append("sickId1", (Number(data.sickId1) * Number(data.status1)));
+            formData.append("sickId2", (Number(data.sickId2) * Number(data.status2)));
             formData.append("categoryId", data.categoryId);
             formData.append("detail", data.detail);
             formData.append("time", data.time);
@@ -253,7 +259,7 @@ const ManageFood = () => {
             if (response && response.data.errCode !== 0) {
                 setMessage(response.message)
             } else {
-                // handleGetExe();
+                handleGetFood();
                 setIsOpenModal(false);
                 showAlert("Thêm mới món ăn thành công !", 2500, "info");
                 emitter.emit("EVENT_CLEAR_MODAL", { id: "123" });
@@ -280,17 +286,19 @@ const ManageFood = () => {
                 itemsCa={itemsCa}
                 itemSick={itemSick}
             />
-            {/* <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
+            <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
                 {message}
-            </Alert> */}
-            {/* {isOpenEditModal && (
-                <EditSick
+            </Alert>
+            {isOpenEditModal && (
+                <EditFood
                     isOpen={true}
-                    toggleUFromParent={toggleFoodCaEditMoDal}
-                    currentSick={sickEdit}
-                    saveSick={saveEditSick}
+                    toggleUFromParent={toggleFoodEditMoDal}
+                    currentFood={foodEdit}
+                    saveFood={saveEditFood}
+                    itemsCa={itemsCa}
+                    itemSick={itemSick}
                 />
-            )} */}
+            )}
             {isOpenEditModalCa && (
                 <EditCategory
                     isOpen={true}
@@ -388,10 +396,13 @@ const ManageFood = () => {
                                     <th scope="col">Id</th>
                                     <th scope="col">Tên món ăn</th>
                                     <th scope="col">Id Sick</th>
+                                    <th scope="col">Id Sick 1</th>
+                                    <th scope="col">Id Sick 2</th>
                                     <th scope="col">Id Food Category</th>
                                     <th scope="col">Tag</th>
                                     <th scope="col">Calo</th>
                                     <th scope="col">Thời gian</th>
+                                    <th scope="col">Image</th>
                                     <th scope="col">Hành động</th>
                                 </tr>
                             </thead>
@@ -405,7 +416,11 @@ const ManageFood = () => {
                                         })
                                         .map((d) => (
                                             <tr key={d.id}>
+                                                <td>{d.id}</td>
                                                 <td>{d.name}</td>
+                                                <td>{d.sickId}</td>
+                                                <td>{d.sickId1}</td>
+                                                <td>{d.sickId2}</td>
                                                 <td>{d.categoryId}</td>
                                                 <td>{d.tag}</td>
                                                 <td>{d.calo}</td>
@@ -418,13 +433,13 @@ const ManageFood = () => {
                                                 <td>
                                                     <div style={{ display: "flex" }}>
                                                         <button
-                                                            // onClick={() => handleEditBlog(d)}
+                                                            onClick={() => handleEditFood(d)}
                                                             className="buttonx button2"
                                                         >
                                                             Edit
                                                         </button>
                                                         <button
-                                                            // onClick={() => handleDeleteFoodCa(d.id)}
+                                                            onClick={() => handleDeleteFood(d.id)}
                                                             className="buttonx button3"
                                                         >
                                                             Delete

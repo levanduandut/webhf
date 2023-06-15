@@ -74,14 +74,14 @@ class EditCategory extends Component {
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
-                    Chỉnh sửa bài tập
+                    Chỉnh sửa loại món ăn
                 </ModalHeader>
                 <ModalBody>
                     <div className="container">
                         <div className="row">
                             <div className="form-row">
                                 <div className="form-group col-md-24">
-                                    <label>Tên loại bài tập</label>
+                                    <label>Tên loại món ăn</label>
                                     <input
                                         type="text"
                                         onChange={(event) => {

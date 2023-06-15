@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import { emitter } from "../../utils/emitter";
+import "./ManageFood.scss";
+import _ from "lodash";
 // import { connect } from "react-redux";
-class AddExercise extends Component {
+class EditFood extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -57,17 +59,10 @@ class AddExercise extends Component {
                 ...copyState,
             });
         }
-
     };
-    handleAddNewFood = () => {
-        if (this.checkValidateInput()) {
-            this.props.createNewFood(this.state);
-        }
-    }
     checkValidateInput = () => {
         let isValid = true;
         let arrInput = [
-            // "image",
             "name",
             "tag",
             "star",
@@ -88,13 +83,43 @@ class AddExercise extends Component {
         return isValid;
     };
     componentDidMount() {
-        this.listenEmitter();
+        let food = this.props.currentFood;
+        if (food && !_.isEmpty(food)) {
+            if (food.sickId1 < 0) {
+                food.sickId1 = 0 - food.sickId1;
+            }
+            if (food.sickId < 0) {
+                food.sickId = 0 - food.sickId;
+            }
+            if (food.sickId2 < 0) {
+                food.sickId2 = 0 - food.sickId2;
+            }
+            this.setState({
+                id: food.id,
+                name: food.name,
+                tag: food.tag,
+                star: food.star,
+                calo: food.calo,
+                categoryId: food.categoryId,
+                sickId: food.sickId,
+                sickId1: food.sickId1,
+                sickId2: food.sickId2,
+                time: food.time,
+                detail: food.detail,
+            });
+        }
     }
+    handleSaveFood = () => {
+        if (this.checkValidateInput()) {
+            this.props.saveFood(this.state);
+        }
+    };
     toggle = () => {
         this.props.toggleUFromParent();
     };
     render() {
         return (
+
             <Modal
                 isOpen={this.props.isOpen}
                 toggle={() => this.toggle()}
@@ -105,7 +130,7 @@ class AddExercise extends Component {
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
-                    Thêm mới món ăn
+                    Chỉnh sửa món ăn
                 </ModalHeader>
                 <ModalBody>
                     <div className="container">
@@ -146,7 +171,7 @@ class AddExercise extends Component {
                                         }}
                                         value={this.state.categoryId}
                                     >
-                                        <option value="">Chọn</option>
+                                        <option value="0">Chọn</option>
                                         {
                                             this.props.itemsCa.map((x) =>
                                                 <option key={x.id} value={x.id}>{x.name}</option>)
@@ -165,7 +190,7 @@ class AddExercise extends Component {
                                         }}
                                         value={this.state.sickId}
                                     >
-                                        <option value="">Chọn</option>
+                                        <option value="0">Chọn</option>
                                         {
                                             this.props.itemSick.map((x) =>
                                                 <option key={x.id} value={x.id}>{x.name}</option>)
@@ -182,7 +207,7 @@ class AddExercise extends Component {
                                         }}
                                         value={this.state.status}
                                     >
-                                        <option value="">Chọn</option>
+                                        <option value="0">Chọn</option>
                                         <option value="1">Nên ăn</option>
                                         <option value="-1">Không nên ăn</option>
                                     </select>
@@ -199,7 +224,7 @@ class AddExercise extends Component {
                                         }}
                                         value={this.state.sickId1}
                                     >
-                                        <option value="">Chọn</option>
+                                        <option value="0">Chọn</option>
                                         {
                                             this.props.itemSick.map((x) =>
                                                 <option key={x.id} value={x.id}>{x.name}</option>)
@@ -216,7 +241,7 @@ class AddExercise extends Component {
                                         }}
                                         value={this.state.status1}
                                     >
-                                        <option value="">Chọn</option>
+                                        <option value="0">Chọn</option>
                                         <option value="1">Nên ăn</option>
                                         <option value="-1">Không nên ăn</option>
                                     </select>
@@ -233,7 +258,7 @@ class AddExercise extends Component {
                                         }}
                                         value={this.state.sickId2}
                                     >
-                                        <option value="">Chọn</option>
+                                        <option value="0">Chọn</option>
                                         {
                                             this.props.itemSick.map((x) =>
                                                 <option key={x.id} value={x.id}>{x.name}</option>)
@@ -250,7 +275,7 @@ class AddExercise extends Component {
                                         }}
                                         value={this.state.status2}
                                     >
-                                        <option value="">Chọn</option>
+                                        <option value="0">Chọn</option>
                                         <option value="1">Nên ăn</option>
                                         <option value="-1">Không nên ăn</option>
                                     </select>
@@ -325,9 +350,9 @@ class AddExercise extends Component {
                     <Button
                         color="primary "
                         className="px-3"
-                        onClick={() => this.handleAddNewFood()}
+                        onClick={() => this.handleSaveFood()}
                     >
-                        Tạo mới
+                        Lưu
                     </Button>{" "}
                     <Button
                         color="danger "
@@ -342,4 +367,5 @@ class AddExercise extends Component {
     }
 }
 
-export default AddExercise;
+
+export default EditFood;
