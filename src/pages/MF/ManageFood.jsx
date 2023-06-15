@@ -5,7 +5,7 @@ import * as XLSX from "xlsx";
 import AddFood from './AddFood';
 import { Alert } from 'reactstrap';
 import "./ManageFood.scss";
-import { deleteFoodCaService, deleteOneFoodService, editFoodCaService, editFoodService, getFood, getFoodCa, getSickService, newFoodCa, newFoodService } from '../../services/userService';
+import { deleteFoodCaService, deleteFoodService, deleteOneFoodService, editFoodCaService, editFoodService, getFood, getFoodCa, getSickService, newFoodCa, newFoodExcelService, newFoodService } from '../../services/userService';
 import AddCategory from './AddCategory';
 import EditCategory from './EditCategory';
 import EditFood from './EditFood';
@@ -92,34 +92,20 @@ const ManageFood = () => {
         });
         e.target.value = null;
     }
-    // async function handleAddExcelSick(data) {
-    //     try {
-    //         let response = await newSickExcelService(data);
-    //         if (response && response.data.errCode !== 0) {
-    //             alert(response.message);
-    //         } else {
-    //             handleGetSick();
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    //     setDataExcel([])
-    // }
-    // async function handleDeleteFoodCa(id) {
-    //     try {
-    //         let response = await deleteOneSickService(id);
-    //         if (response && response.data.errCode !== 0) {
-    //             showAlert("Xóa bệnh không thành công !", 2500, "primary");
-    //         } else {
-    //             setIsOpenModal(false);
-    //             showAlert("Xóa bệnh thành công !", 2500, "primary");
-    //             handleGetSick();
-    //             setVisible(true);
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    async function handleAddExcelFood(data) {
+        try {
+            let response = await newFoodExcelService(data);
+            if (response && response.data.errCode !== 0) {
+                alert(response.message);
+            } else {
+                handleGetFood();
+            }
+            handleGetFood();
+        } catch (error) {
+            console.log(error);
+        }
+        setDataExcel([])
+    }
     async function handleDeleteFoodCa(id) {
         try {
             let response = await deleteFoodCaService(id);
@@ -168,6 +154,7 @@ const ManageFood = () => {
     async function saveEditFood(data) {
         try {
             const formData = new FormData();
+            formData.append("id", data.id);
             formData.append("name", data.name);
             formData.append("calo", data.calo);
             formData.append("tag", data.tag);
@@ -184,26 +171,26 @@ const ManageFood = () => {
             if (response && response.data.errCode !== 0) {
                 alert(response.data.message);
             } else {
-                await handleGetSick();
+                await handleGetFood();
                 setIsOpenEditModal(false);
             }
         } catch (error) {
             console.log(error);
         }
     }
-    // async function handleDeleteAllSick() {
-    //     try {
-    //         let response = await deleteSickService();
-    //         if (response && response.data.errCode !== 0) {
-    //             showAlert("Xóa không thành công !", 2500, "danger");
-    //         } else {
-    //             handleGetSick();
-    //             showAlert("Đã xóa tất cả bệnh !", 2500, "danger");
-    //         }
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    async function handleDeleteAllFood() {
+        try {
+            let response = await deleteFoodService();
+            if (response && response.data.errCode !== 0) {
+                showAlert("Xóa không thành công !", 2500, "danger");
+            } else {
+                handleGetFood();
+                showAlert("Đã xóa tất cả món ăn !", 2500, "danger");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
     async function handleGetFoodCa() {
         try {
             let response = await getFoodCa("");
@@ -369,13 +356,13 @@ const ManageFood = () => {
                         <h5>Nhập file Excel input dữ liệu :</h5>
                         <input type="file" onChange={(e) => readExcel(e)}></input>
                         <button
-                            // onClick={() => handleAddExcelSick(dataExcel)}
+                            onClick={() => handleAddExcelFood(dataExcel)}
                             className="button button5"
                         >
                             Ghi dữ liệu vào database
                         </button>
                         <button
-                            // onClick={() => handleDeleteAllSick()}
+                            onClick={() => handleDeleteAllFood()}
                             className="button button6"
                         >
                             Xóa toàn bộ dữ liệu

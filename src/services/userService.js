@@ -206,6 +206,17 @@ const deleteOneFoodService = (id) => {
 const editFoodService = (data) => {
     return axios.put(`${URL_BE}/api/admin/edit-food`, data);
 };
+const deleteFoodService = () => {
+    return axios.post(
+        `${URL_BE}/api/admin/delete-all-food`,
+        { Delete: 1 }
+    );
+};
+const newFoodExcelService = (data) => {
+    return axios.post(
+        `${URL_BE}/api/admin/create-excel-food`, data
+    );
+};
 
 
 export {
@@ -248,5 +259,7 @@ export {
     newFoodService,
     getFood,
     deleteOneFoodService,
-    editFoodService
+    editFoodService,
+    deleteFoodService,
+    newFoodExcelService
 };
