@@ -12,6 +12,9 @@ class AddExercise extends Component {
             categoryId: '',
             time: '',
             detail: '',
+            sickId: '',
+            sickId1: '',
+            sickId2: ''
         };
 
     }
@@ -24,6 +27,9 @@ class AddExercise extends Component {
                 categoryId: '',
                 time: '',
                 detail: '',
+                sickId: '',
+                sickId1: '',
+                sickId2: ''
             });
         });
     }
@@ -58,6 +64,7 @@ class AddExercise extends Component {
             "categoryId",
             "time",
             "detail",
+            "sickId",
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -122,6 +129,59 @@ class AddExercise extends Component {
                                             <option key={x.id} value={x.id}>{x.name}</option>)
                                     }
                                 </select>
+                            </div>
+                            <div className="form-row" style={{ display: "flex" }}>
+                                <div className="form-group col">
+                                    <label>Loại bệnh</label>
+                                    <select
+                                        name="sickId"
+                                        className="form-control"
+                                        onChange={(event) => {
+                                            this.handleOnchange(event, "sickId");
+                                        }}
+                                        value={this.state.sickId}
+                                    >
+                                        <option value="">Chọn</option>
+                                        {
+                                            this.props.itemSick.map((x) =>
+                                                <option key={x.id} value={x.id}>{x.name}</option>)
+                                        }
+                                    </select>
+                                </div>
+                                <div className="form-group col">
+                                    <label>Loại bệnh 1</label>
+                                    <select
+                                        name="sickId1"
+                                        className="form-control"
+                                        onChange={(event) => {
+                                            this.handleOnchange(event, "sickId1");
+                                        }}
+                                        value={this.state.sickId1}
+                                    >
+                                        <option value="">Chọn</option>
+                                        {
+                                            this.props.itemSick.map((x) =>
+                                                <option key={x.id} value={x.id}>{x.name}</option>)
+                                        }
+                                    </select>
+                                </div>
+                                <div className="form-group col">
+                                    <label>Loại bệnh 2</label>
+                                    <select
+                                        name="sickId2"
+                                        className="form-control"
+                                        onChange={(event) => {
+                                            this.handleOnchange(event, "sickId2");
+                                        }}
+                                        value={this.state.sickId2}
+                                    >
+                                        <option value="">Chọn</option>
+                                        {
+                                            this.props.itemSick.map((x) =>
+                                                <option key={x.id} value={x.id}>{x.name}</option>)
+                                        }
+                                    </select>
+                                </div>
                             </div>
                             <div className="form-row">
                                 <div className="form-group col-md-24">

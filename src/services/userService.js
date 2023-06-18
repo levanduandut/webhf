@@ -143,7 +143,7 @@ const newExeService = (data) => {
 };
 const getExercise = (inputId) => {
     return axios.post(
-        `${URL_BE}/api/user/get-exercise?categoryId=${inputId}`
+        `${URL_BE}/api/user/get-exercise`, { categoryId: inputId }
     );
 };
 const deleteOneExeService = (id) => {
@@ -194,7 +194,7 @@ const newFoodService = (data) => {
 };
 const getFood = (inputId) => {
     return axios.post(
-        `${URL_BE}/api/user/get-food?categoryId=ALL`
+        `${URL_BE}/api/user/get-food`, { categoryId: 'ALL' }
     );
 };
 const deleteOneFoodService = (id) => {

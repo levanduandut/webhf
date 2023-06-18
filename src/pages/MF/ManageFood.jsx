@@ -90,7 +90,7 @@ const ManageFood = () => {
         promise.then((d) => {
             setDataExcel(d)
         });
-        e.target.value = null;
+        e.target.value = null;      
     }
     async function handleAddExcelFood(data) {
         try {

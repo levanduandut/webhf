@@ -13,6 +13,9 @@ class EditExercise extends Component {
             categoryId: '',
             time: '',
             detail: '',
+            sickId: '',
+            sickId1: '',
+            sickId2: '',
         };
 
     }
@@ -25,6 +28,9 @@ class EditExercise extends Component {
                 categoryId: '',
                 time: '',
                 detail: '',
+                sickId: '',
+                sickId1: '',
+                sickId2: '',
             });
         });
     }
@@ -44,7 +50,7 @@ class EditExercise extends Component {
         }
 
     };
-    
+
     handleSaveExe = () => {
         if (this.checkValidateInput()) {
             this.props.saveExe(this.state);
@@ -59,6 +65,7 @@ class EditExercise extends Component {
             "categoryId",
             "time",
             "detail",
+            "sickId"
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -79,6 +86,9 @@ class EditExercise extends Component {
                 categoryId: exe.categoryId,
                 time: exe.time,
                 detail: exe.detail,
+                sickId: exe.sickId,
+                sickId1: exe.sickId1,
+                sickId2: exe.sickId2,
                 id: exe.id,
             });
         }
@@ -98,7 +108,7 @@ class EditExercise extends Component {
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
-                    Thêm mới bài tập
+                    Chỉnh sửa bài tập
                 </ModalHeader>
                 <ModalBody>
                     <div className="container">
@@ -134,6 +144,59 @@ class EditExercise extends Component {
                                             <option key={x.id} value={x.id}>{x.name}</option>)
                                     }
                                 </select>
+                            </div>
+                            <div className="form-row" style={{ display: "flex" }}>
+                                <div className="form-group col">
+                                    <label>Loại bệnh</label>
+                                    <select
+                                        name="sickId"
+                                        className="form-control"
+                                        onChange={(event) => {
+                                            this.handleOnchange(event, "sickId");
+                                        }}
+                                        value={this.state.sickId}
+                                    >
+                                        <option value="">Chọn</option>
+                                        {
+                                            this.props.itemSick.map((x) =>
+                                                <option key={x.id} value={x.id}>{x.name}</option>)
+                                        }
+                                    </select>
+                                </div>
+                                <div className="form-group col">
+                                    <label>Loại bệnh 1</label>
+                                    <select
+                                        name="sickId1"
+                                        className="form-control"
+                                        onChange={(event) => {
+                                            this.handleOnchange(event, "sickId1");
+                                        }}
+                                        value={this.state.sickId1}
+                                    >
+                                        <option value="">Chọn</option>
+                                        {
+                                            this.props.itemSick.map((x) =>
+                                                <option key={x.id} value={x.id}>{x.name}</option>)
+                                        }
+                                    </select>
+                                </div>
+                                <div className="form-group col">
+                                    <label>Loại bệnh 2</label>
+                                    <select
+                                        name="sickId2"
+                                        className="form-control"
+                                        onChange={(event) => {
+                                            this.handleOnchange(event, "sickId2");
+                                        }}
+                                        value={this.state.sickId2}
+                                    >
+                                        <option value="">Chọn</option>
+                                        {
+                                            this.props.itemSick.map((x) =>
+                                                <option key={x.id} value={x.id}>{x.name}</option>)
+                                        }
+                                    </select>
+                                </div>
                             </div>
                             <div className="form-row">
                                 <div className="form-group col-md-24">
@@ -172,7 +235,7 @@ class EditExercise extends Component {
                                     className="form-control"
                                     name="detail"
                                     value={this.state.detail}
-                                    style={{ height: 400 }}
+                                    style={{ height: 300 }}
                                 />
                             </div>
                             <div className="form-group col-md-24">

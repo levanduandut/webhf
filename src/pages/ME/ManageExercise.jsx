@@ -6,7 +6,7 @@ import * as XLSX from "xlsx";
 import AddExercise from './AddExercise';
 import "./ManageExercise.scss";
 import AddCategory from './AddCategory';
-import { deleteExeService, deleteOneExeCaService, deleteOneExeService, editExeCaService, editExeService, getExercise, getExerciseCa, newExeExcelService, newExeService, newExerciseCa } from '../../services/userService';
+import { deleteExeService, deleteOneExeCaService, deleteOneExeService, editExeCaService, editExeService, getExercise, getExerciseCa, getSickService, newExeExcelService, newExeService, newExerciseCa } from '../../services/userService';
 import EditCategory from './EditCategory';
 import EditExercise from './EditExercise';
 
@@ -24,6 +24,7 @@ const ManageExercise = () => {
     const [itemsCa, setItemsCa] = useState([]);
     const [search, setSearch] = useState("");
     const [dataExcel, setDataExcel] = useState([]);
+    const [itemSick, setItemSick] = useState([]);
     const [colorAlert, setColorAlert] = useState("info");
     const onDismiss = () => setVisible(false);
     useEffect(() => {
@@ -32,8 +33,17 @@ const ManageExercise = () => {
         }
         handleGetExeCa();
         handleGetExe();
+        handleGetSick();
         showAlert("Đã load tất cả !", 2500, "primary");
     }, [])
+    async function handleGetSick() {
+        try {
+            let response = await getSickService("");
+            await setItemSick(response.data.sick);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -65,7 +75,7 @@ const ManageExercise = () => {
     }
     async function handleGetExe() {
         try {
-            let response = await getExercise("");
+            let response = await getExercise("ALL");
             await setItems(response.data.exercise);
         } catch (error) {
             console.log(error);
@@ -92,6 +102,9 @@ const ManageExercise = () => {
             const formData = new FormData();
             formData.append("name", data.name);
             formData.append("categoryId", data.categoryId);
+            formData.append("sickId", data.sickId);
+            formData.append("sickId1", data.sickId1);
+            formData.append("sickId2", data.sickId2);
             formData.append("detail", data.detail);
             formData.append("time", data.time);
             formData.append("star", data.star);
@@ -194,6 +207,9 @@ const ManageExercise = () => {
         try {
             const formData = new FormData();
             formData.append("id", data.id);
+            formData.append("sickId", data.sickId);
+            formData.append("sickId1", data.sickId1);
+            formData.append("sickId2", data.sickId2);
             formData.append("name", data.name);
             formData.append("categoryId", data.categoryId);
             formData.append("detail", data.detail);
@@ -249,6 +265,7 @@ const ManageExercise = () => {
                 toggleUFromParent={toggleExeModal}
                 createNewExe={createNewExe}
                 itemsCa={itemsCa}
+                itemSick={itemSick}
             />
             <Alert color={colorAlert} isOpen={visible} toggle={onDismiss}>
                 {message}
@@ -268,11 +285,12 @@ const ManageExercise = () => {
                     currentExe={exeEdit}
                     saveExe={saveEditExe}
                     itemsCa={itemsCa}
+                    itemSick={itemSick}
                 />
             )}
             <h1>Quản lý bài tập thể dục</h1>
             <div className='row row-cols-2'>
-                <div className='col-4'>
+                <div className='col-3'>
                     <button
                         onClick={() => handleAddNewCa()}
                         className="button button4"
@@ -318,7 +336,7 @@ const ManageExercise = () => {
                         </table>
                     </div>
                 </div>
-                <div className='col-8'>
+                <div className='col-6'>
                     <div className="inputFile">
                         <button
                             onClick={() => handleAddNew()}
@@ -357,6 +375,9 @@ const ManageExercise = () => {
                                     <th scope="col">Id</th>
                                     <th scope="col">Tên bài tập</th>
                                     <th scope="col">Phân Loại (id) </th>
+                                    <th scope="col">idSick  </th>
+                                    <th scope="col">idSick 1 </th>
+                                    <th scope="col">idSick 2 </th>
                                     <th scope="col">Thời gian</th>
                                     <th scope="col">Image</th>
                                     <th scope="col">Hành động</th>
@@ -375,6 +396,9 @@ const ManageExercise = () => {
                                                 <td>{d.id}</td>
                                                 <td>{d.name}</td>
                                                 <td>{d.categoryId}</td>
+                                                <td>{d.sickId}</td>
+                                                <td>{d.sickId1}</td>
+                                                <td>{d.sickId2}</td>
                                                 <td>{d.time}</td>
                                                 <td>
                                                     <div>
@@ -397,6 +421,29 @@ const ManageExercise = () => {
                                                         </button>
                                                     </div>
                                                 </td>
+                                            </tr>
+                                        ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div className='col-3'>
+                    <h5>Danh sách bệnh theo Id</h5>
+                    <div className="table-container">
+                        <table className="table container">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Tên bệnh</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {itemSick &&
+                                    itemSick
+                                        .map((d) => (
+                                            <tr key={d.id}>
+                                                <td>{d.id}</td>
+                                                <td>{d.name}</td>
                                             </tr>
                                         ))}
                             </tbody>
