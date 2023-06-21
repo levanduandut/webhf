@@ -218,8 +218,15 @@ const newFoodExcelService = (data) => {
     );
 };
 
+const getInfo = (token) => {
+    return axios.post(
+        `${URL_BE}/api/user/getInfo`, token
+    );
+};
+
 
 export {
+    getInfo,
     deleteIngreService,
     newIngreService,
     getAllUsers,

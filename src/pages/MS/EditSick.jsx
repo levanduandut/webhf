@@ -12,6 +12,7 @@ class EditSick extends Component {
             name: '',
             tag: '',
             detail: '',
+            arring: '',
         };
 
     }
@@ -22,6 +23,7 @@ class EditSick extends Component {
                 name: '',
                 tag: '',
                 detail: '',
+                arring: '',
             });
         });
     }
@@ -40,6 +42,16 @@ class EditSick extends Component {
             });
         }
     };
+    // handleOnChange1 = (event, fieldName) => {
+    //     const value = event.target.value;
+    //     const isValid = this.validateInput(value);
+    //     if (isValid) {
+    //         this.setState({ [fieldName]: value });
+    //     } else {
+    //         // Xử lý khi dữ liệu không hợp lệ
+    //         console.log("Dữ liệu không hợp lệ");
+    //     }
+    // };
     checkValidateInput = () => {
         let isValid = true;
         let arrInput = [
@@ -66,6 +78,7 @@ class EditSick extends Component {
                 tag: sick.tag,
                 detail: sick.detail,
                 image: sick.image,
+                arring: sick.arring,
             });
         }
     }
@@ -77,6 +90,22 @@ class EditSick extends Component {
     toggle = () => {
         this.props.toggleUFromParent();
     };
+    // validateInput = (value) => {
+    //     if (value.trim() === "") {
+    //         // Trường rỗng, không cần kiểm tra
+    //         return true;
+    //     }
+
+    //     const regex = /^(-?\d+(,-?\d+)*)?$/;
+
+    //     if (!regex.test(value)) {
+    //         // Dữ liệu không đúng định dạng
+    //         return false;
+    //     }
+
+    //     // Dữ liệu đúng định dạng
+    //     return true;
+    // };
     render() {
         return (
             <Modal
@@ -124,6 +153,20 @@ class EditSick extends Component {
                                     />
                                 </div>
                             </div>
+                            <div className="form-row">
+                                <div className="form-group col-md-24">
+                                    <label>Array</label>
+                                    <input
+                                        type="text"
+                                        onChange={(event) => {
+                                            this.handleOnchange(event, "arring");
+                                        }}
+                                        className="form-control"
+                                        name="arring"
+                                        value={this.state.arring}
+                                    />
+                                </div>
+                            </div>
                             <div className="form-group col-md-24">
                                 <label>Nội dung</label>
                                 <textarea
@@ -133,7 +176,7 @@ class EditSick extends Component {
                                     className="form-control"
                                     name="detail"
                                     value={this.state.detail}
-                                    style={{height:400}}
+                                    style={{ height: 400 }}
                                 />
                             </div>
                             <div className="form-group col-md-24">

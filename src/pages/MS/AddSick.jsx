@@ -8,6 +8,7 @@ class AddSick extends Component {
         super(props);
         this.state = {
             image: '',
+            arring:'',
             name: '',
             tag: '',
             detail: '',
@@ -18,6 +19,7 @@ class AddSick extends Component {
         emitter.on("EVENT_CLEAR_MODAL", () => {
             this.setState({
                 name: '',
+                arring:'',
                 tag: '',
                 detail: '',
                 image: '',
@@ -112,6 +114,20 @@ class AddSick extends Component {
                                         className="form-control"
                                         name="tag"
                                         value={this.state.tag}
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-row">
+                                <div className="form-group col-md-24">
+                                    <label>Array</label>
+                                    <input
+                                        type="text"
+                                        onChange={(event) => {
+                                            this.handleOnchange(event, "arring");
+                                        }}
+                                        className="form-control"
+                                        name="arring"
+                                        value={this.state.arring}
                                     />
                                 </div>
                             </div>

@@ -52,6 +52,7 @@ const ManageSick = () => {
         try {
             const formData = new FormData();
             formData.append("name", data.name);
+            formData.append("arring", data.arring);
             formData.append("tag", data.tag);
             formData.append("detail", data.detail);
             formData.append("image", data.image);
@@ -131,6 +132,7 @@ const ManageSick = () => {
             const formData = new FormData();
             formData.append("id", data.id);
             formData.append("name", data.name);
+            formData.append("arring", data.arring);
             formData.append("tag", data.tag);
             formData.append("detail", data.detail);
             formData.append("image", data.image);
@@ -215,6 +217,7 @@ const ManageSick = () => {
                         <tr>
                             <th scope="col">Id</th>
                             <th scope="col">Tên bệnh</th>
+                            <th scope="col">Array Id SBF</th>
                             <th scope="col">Tag</th>
                             <th scope="col">Mô tả</th>
                             <th scope="col">Image</th>
@@ -233,6 +236,7 @@ const ManageSick = () => {
                                     <tr key={d.id}>
                                         <td>{d.id}</td>
                                         <td>{d.name}</td>
+                                        <td>{d.arring}</td>
                                         <td>{d.tag}</td>
                                         <td>{d.detail}</td>
                                         <td>
