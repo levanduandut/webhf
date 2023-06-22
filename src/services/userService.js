@@ -223,7 +223,11 @@ const getInfo = (token) => {
         `${URL_BE}/api/user/getInfo`, token
     );
 };
-
+const getField = () => {
+    return axios.get(
+        `${URL_BE}/api/user/get-field`, 
+    );
+};
 
 export {
     getInfo,
@@ -268,5 +272,6 @@ export {
     deleteOneFoodService,
     editFoodService,
     deleteFoodService,
-    newFoodExcelService
+    newFoodExcelService,
+    getField
 };

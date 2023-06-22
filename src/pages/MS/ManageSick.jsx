@@ -4,7 +4,7 @@ import { emitter } from "../../utils/emitter";
 import AddSick from './AddSick';
 import { Alert } from 'reactstrap';
 import * as XLSX from "xlsx";
-import { deleteOneSickService, deleteSickService, editSickService, getSickService, newSickExcelService, newSickService } from '../../services/userService';
+import { deleteOneSickService, deleteSickService, editSickService, getField, getSickService, newSickExcelService, newSickService } from '../../services/userService';
 import EditSick from './EditSick';
 const ManageSick = () => {
     const navigate = useNavigate();
@@ -14,6 +14,7 @@ const ManageSick = () => {
     const [message, setMessage] = useState("");
     const [sickEdit, setSickEdit] = useState({});
     const [items, setItems] = useState([]);
+    const [field, setField] = useState([]);
     const [search, setSearch] = useState("");
     const [dataExcel, setDataExcel] = useState([]);
     const [colorAlert, setColorAlert] = useState("info");
@@ -23,8 +24,17 @@ const ManageSick = () => {
             navigate("/login")
         }
         handleGetSick();
-        showAlert("Đã load tất cả bệnh !", 2500, "primary");
+        handleGetField();
     }, [])
+    async function handleGetField() {
+        try {
+            let response = await getField();
+            console.log(response.data.field);
+            await setField(response.data.field);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
@@ -179,92 +189,125 @@ const ManageSick = () => {
                     saveSick={saveEditSick}
                 />
             )}
-            <h1>Quản lý bệnh</h1>
-            <div className="inputFile">
-                <button
-                    onClick={() => handleAddNew()}
-                    className="button button4"
-                >
-                    Thêm bệnh
-                </button>
-                {" Hoặc "}
-                <h5>Nhập file Excel input dữ liệu :</h5>
-                <input type="file" onChange={(e) => readExcel(e)}></input>
-                <button
-                    onClick={() => handleAddExcelSick(dataExcel)}
-                    className="button button5"
-                >
-                    Ghi dữ liệu vào database
-                </button>
-                <button
-                    onClick={() => handleDeleteAllSick()}
-                    className="button button6"
-                >
-                    Xóa toàn bộ dữ liệu
-                </button>
+            <div className='row row-cols-3'>
+                <div className='col-3'>
+                    <h5>Danh sách bệnh theo Id</h5>
+                    <div className="table-container">
+                        <table className="table container">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Tên Trường Sắp Xếp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {field &&
+                                    field
+                                        .map((d, index) => (
+                                            <tr key={index}>
+                                                <td>{index}</td>
+                                                <td>{d}</td>
+                                            </tr>
+                                        ))}
+                            </tbody>
+                        </table>
+                    </div>
+                    <h4>Chú thích : Array Id SBF</h4>
+                    <p>(Sort by Field : Sắp xếp sư ưu tiên các thành phần thực phẩm)</p>
+                    <p>- Nếu Id SBF {'>'} 0 : Thành phần nên ăn </p>
+                    <p>- Nếu Id SBF {'<'} 0 : Thành phần không nên ăn</p>
+                    <p>- Array Id SBF xếp theo thứ tự ưu tiên từ trái qua phải </p>
+                </div>
+                <div className='col-9'>
+                    <h1>Quản lý bệnh</h1>
+                    <div className="inputFile">
+                        <button
+                            onClick={() => handleAddNew()}
+                            className="button button4"
+                        >
+                            Thêm bệnh
+                        </button>
+                        {" Hoặc "}
+                        <h5>Nhập file Excel input dữ liệu :</h5>
+                        <input type="file" onChange={(e) => readExcel(e)}></input>
+                        <button
+                            onClick={() => handleAddExcelSick(dataExcel)}
+                            className="button button5"
+                        >
+                            Ghi dữ liệu vào database
+                        </button>
+                        <button
+                            onClick={() => handleDeleteAllSick()}
+                            className="button button6"
+                        >
+                            Xóa toàn bộ dữ liệu
+                        </button>
+                    </div>
+
+                    <div className="inputFile">
+                        <input
+                            placeholder="Tìm kiếm "
+                            className="form-control"
+                            onChange={(e) => setSearch(e.target.value)}
+                        ></input>
+                    </div>
+                    <div className="table-container">
+                        <table className="table container">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Id</th>
+                                    <th scope="col">Tên bệnh</th>
+                                    <th scope="col">Array Id SBF</th>
+                                    <th scope="col">Tag</th>
+                                    <th scope="col">Mô tả</th>
+                                    <th scope="col">Image</th>
+                                    <th scope="col">Hành động</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {items &&
+                                    items
+                                        .filter((item) => {
+                                            return search.toLowerCase() === ""
+                                                ? item
+                                                : item.name.toLowerCase().includes(search);
+                                        })
+                                        .map((d) => (
+                                            <tr key={d.id}>
+                                                <td>{d.id}</td>
+                                                <td>{d.name}</td>
+                                                <td>{d.arring}</td>
+                                                <td>{d.tag}</td>
+                                                <td>{d.detail}</td>
+                                                <td>
+                                                    <div>
+                                                        <img style={{ width: '50px', height: '50px' }} src={d.image != null ? `https://storage.googleapis.com/healthfood-do/${d.image}` : ""} />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style={{ display: "flex" }}>
+                                                        <button
+                                                            onClick={() => handleEditBlog(d)}
+                                                            className="buttonx button2"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDeleteSick(d.id)}
+                                                            className="buttonx button3"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
-            <div className="inputFile">
-                <input
-                    placeholder="Tìm kiếm "
-                    className="form-control"
-                    onChange={(e) => setSearch(e.target.value)}
-                ></input>
-            </div>
-            <div className="table-container">
-                <table className="table container">
-                    <thead>
-                        <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">Tên bệnh</th>
-                            <th scope="col">Array Id SBF</th>
-                            <th scope="col">Tag</th>
-                            <th scope="col">Mô tả</th>
-                            <th scope="col">Image</th>
-                            <th scope="col">Hành động</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items &&
-                            items
-                                .filter((item) => {
-                                    return search.toLowerCase() === ""
-                                        ? item
-                                        : item.name.toLowerCase().includes(search);
-                                })
-                                .map((d) => (
-                                    <tr key={d.id}>
-                                        <td>{d.id}</td>
-                                        <td>{d.name}</td>
-                                        <td>{d.arring}</td>
-                                        <td>{d.tag}</td>
-                                        <td>{d.detail}</td>
-                                        <td>
-                                            <div>
-                                                <img style={{ width: '50px', height: '50px' }} src={d.image != null ? `https://storage.googleapis.com/healthfood-do/${d.image}` : ""} />
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style={{ display: "flex" }}>
-                                                <button
-                                                    onClick={() => handleEditBlog(d)}
-                                                    className="buttonx button2"
-                                                >
-                                                    Edit
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteSick(d.id)}
-                                                    className="buttonx button3"
-                                                >
-                                                    Delete
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                    </tbody>
-                </table>
-            </div>
         </div>
     );
 };

@@ -6,14 +6,10 @@ import { About, Dashboard, ManageBlog, ManageExercise, ManageFood, ManageIngredi
 import Login from './pages/LG/Login';
 
 const App = () => {
-
-
-  let  logger =  (localStorage.getItem("JWT"));
   
   return (
     <div>
       <BrowserRouter>
-        {/* {logger ? ( */}
           <Sidebar >
             <Routes>
               <Route path='*' element={<About />} />
@@ -27,9 +23,6 @@ const App = () => {
               <Route path='/login' element={<Login />} />
             </Routes>
           </Sidebar>
-        {/* ) : (<Routes>
-          <Route path='/login' element={<Login />} />
-        </Routes>)} */}
       </BrowserRouter>
     </div >
   );
