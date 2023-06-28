@@ -15,8 +15,8 @@ const getAllUsers = (inputId) => {
 const createNewUserService = (data) => {
     return axios.post(`${URL_BE}/api/admin/create-new-user`, data);
 };
-const deleteUserService = (id) => {
-    return axios.post(`${URL_BE}/api/admin/delete-user`, { id: id });
+const deleteUserService = (id, token) => {
+    return axios.post(`${URL_BE}/api/admin/delete-user`, { id: id, token: token });
 };
 const editUserService = (data) => {
     return axios.put(`${URL_BE}/api/admin/edit-user`, data);
@@ -225,12 +225,12 @@ const getInfo = (token) => {
 };
 const getSickUser = (data) => {
     return axios.post(
-        `${URL_BE}/api/user/get-all-sick`, data
+        `${URL_BE}/api/user/health-info`, data
     );
 };
 const getField = () => {
     return axios.get(
-        `${URL_BE}/api/user/get-field`, 
+        `${URL_BE}/api/user/get-field`,
     );
 };
 

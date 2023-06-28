@@ -15,27 +15,14 @@ class ManageUser extends Component {
         super(props);
         this.state = {
             arrUsers: [],
-            itemSick:[],
             isOpenModal: false,
             isOpenEditUser: false,
             userEdit: {},
             search: "",
-            cateSearch: "email"
         };
     }
     async componentDidMount() {
         await this.getAllUsersFrom();
-        await this.handleGetSick();
-    }
-    handleGetSick = async () =>{
-        try {
-            let response = await getSickService("");
-            this.setState({
-                itemSick: response.data.sick,
-            });
-        } catch (error) {
-            console.log(error);
-        }
     }
 
     getAllUsersFrom = async () => {
@@ -81,7 +68,8 @@ class ManageUser extends Component {
     
     handleDeleteUser = async (item) => {
         try {
-            let response = await deleteUserService(item.id);
+            let token = localStorage.getItem("JWT");
+            let response = await deleteUserService(item.id, token);
             if (response && response.data && response.data.errCode !== 0) {
                 alert(response.data.message);
             } else {
@@ -116,7 +104,6 @@ class ManageUser extends Component {
 
     render() {
         let arrUsers = this.state.arrUsers;
-        let itemSick = this.state.itemSick;
         return (
             <div>
                 <ModalUser
