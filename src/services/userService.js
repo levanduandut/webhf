@@ -223,6 +223,11 @@ const getInfo = (token) => {
         `${URL_BE}/api/user/getInfo`, token
     );
 };
+const getSickUser = (data) => {
+    return axios.post(
+        `${URL_BE}/api/user/get-all-sick`, data
+    );
+};
 const getField = () => {
     return axios.get(
         `${URL_BE}/api/user/get-field`, 
@@ -273,5 +278,6 @@ export {
     editFoodService,
     deleteFoodService,
     newFoodExcelService,
-    getField
+    getField,
+    getSickUser
 };

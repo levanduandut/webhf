@@ -94,7 +94,6 @@ class EditBlog extends Component {
                 className={"modal-user"}
                 scrollable={true}
                 centered
-                fullscreen
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
@@ -166,6 +165,7 @@ class EditBlog extends Component {
                             <div className="form-group col-md-24">
                                 <label>Nội dung</label>
                                 <textarea
+                                    style={{ height: 400 }}
                                     onChange={(event) => {
                                         this.handleOnchange(event, "detail");
                                     }}

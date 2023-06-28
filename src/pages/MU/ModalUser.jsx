@@ -11,7 +11,6 @@ class ModalUser extends Component {
             age: "",
             password: "",
             fullName: "",
-            address: "",
             gender: "",
             roleId: "",
         };
@@ -24,7 +23,6 @@ class ModalUser extends Component {
                 email: "",
                 password: "",
                 fullName: "",
-                address: "",
                 gender: "",
                 roleId: "",
             });
@@ -50,7 +48,6 @@ class ModalUser extends Component {
             "email",
             "password",
             "fullName",
-            "address",
             "gender",
             "roleId",
             "age",
@@ -133,19 +130,6 @@ class ModalUser extends Component {
                                     />
                                 </div>
                             </div>
-                            <div className="form-group col-md-24">
-                                <label>Địa chỉ</label>
-                                <input
-                                    type="text"
-                                    onChange={(event) => {
-                                        this.handleOnchange(event, "address");
-                                    }}
-                                    className="form-control"
-                                    name="address"
-                                    placeholder="Vd: 123 Nguyễn Lương Bằng, TP.Đà Nẵng"
-                                    value={this.state.address}
-                                />
-                            </div>
                             <div className="form-row" style={{ display: 'flex', gap: '20px' }}>
                                 <div className="form-group col-md-3">
                                     <label>Giới tính</label>
@@ -158,9 +142,9 @@ class ModalUser extends Component {
                                         value={this.state.gender}
                                     >
                                         <option value="">Chọn</option>
-                                        <option value="0">Nam</option>
                                         <option value="1">Nữ</option>
-                                        <option value="2">Khác</option>
+                                        <option value="2">Nam</option>
+                                        <option value="3">Khác</option>
                                     </select>
                                 </div>
                                 <div className="form-group col-md-3">

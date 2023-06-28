@@ -20,6 +20,7 @@ const ManageBlog = () => {
     const [isOpenEditModal, setIsOpenEditModal] = useState(false);
     const [visible, setVisible] = useState(false);
     const onDismiss = () => setVisible(false);
+    const arrBlog = ['Lối sông', 'Công thức nấu ăn', 'Lưu ý', 'Mẹo vặt'];
     useEffect(() => {
         if (!localStorage.getItem("JWT")) {
             navigate("/login")
@@ -241,12 +242,12 @@ const ManageBlog = () => {
                                     <tr key={d.id}>
                                         <td>{d.id}</td>
                                         <td>{d.title}</td>
-                                        <td>{d.categoryId}</td>
+                                        <td>{arrBlog[d.categoryId - 1]}</td>
                                         <td>{d.tag}</td>
                                         <td>{d.star}</td>
                                         <td>
                                             <div>
-                                                <img style={{ width: '50px', height: '50px' }} src={d.image!=null?`https://storage.googleapis.com/healthfood-do/${d.image}`:""} />
+                                                <img style={{ width: '50px', height: '50px' }} src={d.image != null ? `https://storage.googleapis.com/healthfood-do/${d.image}` : ""} />
                                             </div>
                                         </td>
                                         <td>

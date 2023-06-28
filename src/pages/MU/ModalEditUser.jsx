@@ -10,7 +10,6 @@ class ModalEditUser extends Component {
             email: "",
             password: "",
             fullName: "",
-            address: "",
             gender: "",
             roleId: "",
 
@@ -37,7 +36,6 @@ class ModalEditUser extends Component {
             "age",
             "email",
             "fullName",
-            "address",
             "gender",
             "roleId",
             "age",
@@ -61,7 +59,6 @@ class ModalEditUser extends Component {
                 id: user.id,
                 email: user.email,
                 fullName: user.fullName,
-                address: user.address,
                 gender: user.gender,
                 roleId: user.roleId,
                 age: user.age,
@@ -122,19 +119,6 @@ class ModalEditUser extends Component {
                                         value={this.state.fullName}
                                     />
                                 </div>
-                            </div>
-                            <div className="form-group col-md-24">
-                                <label>Địa chỉ</label>
-                                <input
-                                    type="text"
-                                    onChange={(event) => {
-                                        this.handleOnchange(event, "address");
-                                    }}
-                                    className="form-control"
-                                    name="address"
-                                    placeholder="Vd: 123 Nguyễn Lương Bằng, TP.Đà Nẵng"
-                                    value={this.state.address}
-                                />
                             </div>
                             <div className="form-row" style={{ display: 'flex', gap: '20px' }}>
                                 <div className="form-group col-md-3">

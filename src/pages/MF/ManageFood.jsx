@@ -33,7 +33,9 @@ const ManageFood = () => {
         }
         handleGetSick();
         handleGetFoodCa();
-        handleGetFood();
+        if (itemsCa && itemSick) {
+            handleGetFood();
+        }
         showAlert("Đã load thành công dữ liệu !", 2500, "primary");
     }, [])
     function sleep(ms) {
@@ -90,7 +92,7 @@ const ManageFood = () => {
         promise.then((d) => {
             setDataExcel(d)
         });
-        e.target.value = null;      
+        e.target.value = null;
     }
     async function handleAddExcelFood(data) {
         try {
@@ -382,9 +384,9 @@ const ManageFood = () => {
                                 <tr>
                                     <th scope="col">Id</th>
                                     <th scope="col">Tên món ăn</th>
-                                    <th scope="col">Id Sick</th>
-                                    <th scope="col">Id Sick 1</th>
-                                    <th scope="col">Id Sick 2</th>
+                                    <th scope="col">Bệnh</th>
+                                    <th scope="col">Bệnh 1</th>
+                                    <th scope="col">Bệnh 2</th>
                                     <th scope="col">Id Food Category</th>
                                     <th scope="col">Tag</th>
                                     <th scope="col">Calo</th>
@@ -394,7 +396,7 @@ const ManageFood = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {items &&
+                                {items && itemsCa && itemSick &&
                                     items
                                         .filter((item) => {
                                             return search.toLowerCase() === ""
@@ -405,10 +407,16 @@ const ManageFood = () => {
                                             <tr key={d.id}>
                                                 <td>{d.id}</td>
                                                 <td>{d.name}</td>
-                                                <td>{d.sickId}</td>
-                                                <td>{d.sickId1}</td>
-                                                <td>{d.sickId2}</td>
-                                                <td>{d.categoryId}</td>
+                                                <td style={{ backgroundColor: d.sickId < 0 ? '#ff9999' : 'inherit' }}>
+                                                    {itemSick[Math.abs(d.sickId) - 1]?.name}
+                                                </td>
+                                                <td style={{ backgroundColor: d.sickId1 < 0 ? '#ff9999' : 'inherit' }}>
+                                                    {itemSick[Math.abs(d.sickId1) - 1]?.name}
+                                                </td>
+                                                <td style={{ backgroundColor: d.sickId2 < 0 ? '#ff9999' : 'inherit' }}>
+                                                    {itemSick[Math.abs(d.sickId2) - 1]?.name}
+                                                </td>
+                                                <td>{itemsCa[d.categoryId - 1]?.name}</td>
                                                 <td>{d.tag}</td>
                                                 <td>{d.calo}</td>
                                                 <td>{d.time}</td>
@@ -464,6 +472,7 @@ const ManageFood = () => {
                     <h4>Lưu ý:</h4>
                     <p>- Nếu idSick món ăn = Id Bệnh : Nên Ăn</p>
                     <p>- Nếu idSick món ăn = - Id Bệnh : Không Nên Ăn</p>
+                    <p>  Ô có màu đỏ ở bảng giữa : Không nên ăn</p>
                 </div>
             </div>
         </div>

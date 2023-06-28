@@ -83,7 +83,7 @@ class AddSick extends Component {
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
-                    Thêm mới bài viết
+                    Thêm mới bệnh
                 </ModalHeader>
                 <ModalBody>
                     <div className="container">
@@ -119,7 +119,7 @@ class AddSick extends Component {
                             </div>
                             <div className="form-row">
                                 <div className="form-group col-md-24">
-                                    <label>Array</label>
+                                    <label>Array Id SBF</label>
                                     <input
                                         type="text"
                                         onChange={(event) => {

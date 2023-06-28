@@ -115,7 +115,6 @@ class EditSick extends Component {
                 className={"modal-user"}
                 scrollable={true}
                 centered
-                fullscreen
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
@@ -155,7 +154,7 @@ class EditSick extends Component {
                             </div>
                             <div className="form-row">
                                 <div className="form-group col-md-24">
-                                    <label>Array</label>
+                                    <label>Array Id SBF</label>
                                     <input
                                         type="text"
                                         onChange={(event) => {

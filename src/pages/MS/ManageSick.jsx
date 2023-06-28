@@ -191,7 +191,7 @@ const ManageSick = () => {
             )}
             <div className='row row-cols-3'>
                 <div className='col-3'>
-                    <h5>Danh sách bệnh theo Id</h5>
+                    <h5>Danh sách các trường trong thành phần thực phẩm</h5>
                     <div className="table-container">
                         <table className="table container">
                             <thead>

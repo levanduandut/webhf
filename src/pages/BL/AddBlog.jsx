@@ -80,11 +80,11 @@ class AddBlog extends Component {
             <Modal
                 isOpen={this.props.isOpen}
                 toggle={() => this.toggle()}
-                size="lg"
+                size="xl"
                 className={"modal-user"}
                 scrollable={true}
                 centered
-                fullscreen
+
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
@@ -156,6 +156,7 @@ class AddBlog extends Component {
                             <div className="form-group col-md-24">
                                 <label>Nội dung</label>
                                 <textarea
+                                    style={{ height: 400 }}
                                     onChange={(event) => {
                                         this.handleOnchange(event, "detail");
                                     }}

@@ -5,6 +5,7 @@ import {
     createNewUserService,
     deleteUserService,
     editUserService,
+    getSickService,
 } from "../../services/userService";
 import ModalUser from "./ModalUser";
 import ModalEditUser from "./ModalEditUser";
@@ -14,6 +15,7 @@ class ManageUser extends Component {
         super(props);
         this.state = {
             arrUsers: [],
+            itemSick:[],
             isOpenModal: false,
             isOpenEditUser: false,
             userEdit: {},
@@ -23,6 +25,17 @@ class ManageUser extends Component {
     }
     async componentDidMount() {
         await this.getAllUsersFrom();
+        await this.handleGetSick();
+    }
+    handleGetSick = async () =>{
+        try {
+            let response = await getSickService("");
+            this.setState({
+                itemSick: response.data.sick,
+            });
+        } catch (error) {
+            console.log(error);
+        }
     }
 
     getAllUsersFrom = async () => {
@@ -65,6 +78,7 @@ class ManageUser extends Component {
             console.log(error);
         }
     };
+    
     handleDeleteUser = async (item) => {
         try {
             let response = await deleteUserService(item.id);
@@ -102,6 +116,7 @@ class ManageUser extends Component {
 
     render() {
         let arrUsers = this.state.arrUsers;
+        let itemSick = this.state.itemSick;
         return (
             <div>
                 <ModalUser
@@ -144,8 +159,6 @@ class ManageUser extends Component {
                                     <th>Phân Quyền</th>
                                     <th>Giới tính</th>
                                     <th>Tuổi</th>
-                                    <th>Tình trạng bệnh</th>
-                                    <th>Địa chỉ</th>
                                     <th>Ngày tạo</th>
                                     <th>Ngày cập nhật</th>
                                     <th>Hành động</th>
@@ -167,13 +180,11 @@ class ManageUser extends Component {
                                                     <td>
                                                         {item.gender === 1
                                                             ? "Nữ"
-                                                            : item.gender === 0
+                                                            : item.gender === 2
                                                                 ? "Nam"
                                                                 : "Khác"}
                                                     </td>
                                                     <td>{item.age === null ? "" : item.age}</td>
-                                                    <td>{item.sick === null ? "Khỏe mạnh" : item.sick}</td>
-                                                    <td>{item.address === null ? "" : item.address}</td>
                                                     <td>
                                                         {new Date(item.createdAt).getDate()}/
                                                         {new Date(item.createdAt).getMonth() + 1}/
@@ -197,7 +208,6 @@ class ManageUser extends Component {
                                                         >
                                                             Delete
                                                         </button>
-                                                        <button className="button button4">Info</button>
                                                     </td>
                                                 </tr>
                                             );

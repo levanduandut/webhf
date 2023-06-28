@@ -32,8 +32,10 @@ const ManageExercise = () => {
             navigate("/login")
         }
         handleGetExeCa();
-        handleGetExe();
         handleGetSick();
+        if (itemsCa && itemSick) {
+            handleGetExe();
+        }
         showAlert("Đã load tất cả !", 2500, "primary");
     }, [])
     async function handleGetSick() {
@@ -375,16 +377,16 @@ const ManageExercise = () => {
                                     <th scope="col">Id</th>
                                     <th scope="col">Tên bài tập</th>
                                     <th scope="col">Phân Loại (id) </th>
-                                    <th scope="col">idSick  </th>
-                                    <th scope="col">idSick 1 </th>
-                                    <th scope="col">idSick 2 </th>
+                                    <th scope="col">Bệnh  </th>
+                                    <th scope="col">Bệnh 1 </th>
+                                    <th scope="col">Bệnh 2 </th>
                                     <th scope="col">Thời gian</th>
                                     <th scope="col">Image</th>
                                     <th scope="col">Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {items &&
+                                {items && itemSick && itemsCa &&
                                     items
                                         .filter((item) => {
                                             return search.toLowerCase() === ""
@@ -395,10 +397,10 @@ const ManageExercise = () => {
                                             <tr key={d.id}>
                                                 <td>{d.id}</td>
                                                 <td>{d.name}</td>
-                                                <td>{d.categoryId}</td>
-                                                <td>{d.sickId}</td>
-                                                <td>{d.sickId1}</td>
-                                                <td>{d.sickId2}</td>
+                                                <td>{itemsCa[d.categoryId - 1]?.name}</td>
+                                                <td>{itemSick[d.sickId - 1]?.name}</td>
+                                                <td>{itemSick[d.sickId1 - 1]?.name}</td>
+                                                <td>{itemSick[d.sickId2 - 1]?.name}</td>
                                                 <td>{d.time}</td>
                                                 <td>
                                                     <div>
