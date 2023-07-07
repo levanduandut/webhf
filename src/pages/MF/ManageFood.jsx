@@ -422,7 +422,7 @@ const ManageFood = () => {
                                                 <td>{d.time}</td>
                                                 <td>
                                                     <div>
-                                                        <img style={{ width: '50px', height: '50px' }} src={d.image != null ? `https://storage.googleapis.com/healthfood-do/${d.image}` : ""} />
+                                                        <img style={{ width: '50px', height: '50px' }} src={d.image != null ? `${d.image}` : ""} />
                                                     </div>
                                                 </td>
                                                 <td>

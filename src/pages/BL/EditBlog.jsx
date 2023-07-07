@@ -165,7 +165,7 @@ class EditBlog extends Component {
                             <div className="form-group col-md-24">
                                 <label>Nội dung</label>
                                 <textarea
-                                    style={{ height: 400 }}
+                                    style={{ height: 300 }}
                                     onChange={(event) => {
                                         this.handleOnchange(event, "detail");
                                     }}

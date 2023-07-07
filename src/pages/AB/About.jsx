@@ -92,7 +92,7 @@ const About = () => {
             </p>
             <div
               style={{
-                backgroundColor: "#bee2ad",
+                backgroundColor: "#b5ff93",
                 padding: 10,
                 borderRadius: 10,
                 marginBottom:10,

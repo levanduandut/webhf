@@ -59,9 +59,24 @@ class ModalUser extends Component {
                 break;
             }
         }
+        if (isValid && this.state.password.length < 4) {
+            isValid = false;
+            alert("Mật khẩu phải có ít nhất 4 kí tự.");
+        }
+        if (isValid && !Number.isInteger(Number(this.state.age))) {
+            isValid = false;
+            alert("Tuổi phải là một số nguyên.");
+        }
+        if (isValid && !this.validateEmail(this.state.email)) {
+            isValid = false;
+            alert("Email không đúng định dạng.");
+        }
         return isValid;
     };
-
+    validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
     componentDidMount() {
         this.listenEmitter();
     }
@@ -200,12 +215,5 @@ class ModalUser extends Component {
     }
 }
 
-// const mapStateToProps = (state) => {
-//     return {};
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {};
-// };
 
 export default ModalUser;

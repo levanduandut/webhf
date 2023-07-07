@@ -74,7 +74,7 @@ class EditCategory extends Component {
             >
                 <ModalHeader toggle={() => this.toggle()}>
                     {" "}
-                    Chỉnh sửa bài tập
+                    Chỉnh sửa loại bài tập
                 </ModalHeader>
                 <ModalBody>
                     <div className="container">

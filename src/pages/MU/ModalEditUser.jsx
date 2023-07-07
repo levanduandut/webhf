@@ -47,6 +47,10 @@ class ModalEditUser extends Component {
                 break;
             }
         }
+        if (isValid && !Number.isInteger(Number(this.state.age))) {
+            isValid = false;
+            alert("Tuổi phải là một số nguyên.");
+        }
         return isValid;
     };
 
@@ -132,9 +136,9 @@ class ModalEditUser extends Component {
                                         value={this.state.gender}
                                     >
                                         <option value="">Chọn</option>
-                                        <option value="0">Nam</option>
+                                        <option value="2">Nam</option>
                                         <option value="1">Nữ</option>
-                                        <option value="2">Khác</option>
+                                        <option value="3">Khác</option>
                                     </select>
                                 </div>
                                 <div className="form-group col-md-3">
@@ -155,7 +159,7 @@ class ModalEditUser extends Component {
                                 <div className="form-group col-md-3">
                                     <label>Tuổi</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         onChange={(event) => {
                                             this.handleOnchange(event, "age");
                                         }}
@@ -189,13 +193,5 @@ class ModalEditUser extends Component {
         );
     }
 }
-
-// const mapStateToProps = (state) => {
-//     return {};
-// };
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {};
-// };
 
 export default ModalEditUser;

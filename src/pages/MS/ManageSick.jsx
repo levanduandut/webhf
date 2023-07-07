@@ -213,10 +213,8 @@ const ManageSick = () => {
                         </table>
                     </div>
                     <h4>Chú thích : Array Id SBF</h4>
-                    <p>(Sort by Field : Sắp xếp sư ưu tiên các thành phần thực phẩm)</p>
                     <p>- Nếu Id SBF {'>'} 0 : Thành phần nên ăn </p>
                     <p>- Nếu Id SBF {'<'} 0 : Thành phần không nên ăn</p>
-                    <p>- Array Id SBF xếp theo thứ tự ưu tiên từ trái qua phải </p>
                 </div>
                 <div className='col-9'>
                     <h1>Quản lý bệnh</h1>
@@ -281,7 +279,7 @@ const ManageSick = () => {
                                                 <td>{d.detail}</td>
                                                 <td>
                                                     <div>
-                                                        <img style={{ width: '50px', height: '50px' }} src={d.image != null ? `https://storage.googleapis.com/healthfood-do/${d.image}` : ""} />
+                                                        <img style={{ width: '50px', height: '50px' }} src={d.image != null ? `${d.image}` : ""} />
                                                     </div>
                                                 </td>
                                                 <td>
